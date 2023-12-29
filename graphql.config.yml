@@ -1,0 +1,5 @@
+schema: graphql/schema.graphql
+extensions:
+  endpoints:
+    localhost:
+      url: http://127.0.0.1:54321/graphql/v1

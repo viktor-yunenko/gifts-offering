@@ -8,7 +8,8 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noAssignInExpressions": "off"
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "warn"
 			},
 			"nursery": {
 				"noUnusedImports": "warn"
@@ -19,6 +20,12 @@
 		"enabled": true
 	},
 	"files": {
-		"include": ["src/", "package.json", "biome.json", "nuxt.config.ts"]
+		"include": [
+			"src/",
+			"package.json",
+			"biome.json",
+			"nuxt.config.ts",
+			"graphql/"
+		]
 	}
 }
