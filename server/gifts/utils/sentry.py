@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import logging
 import typing
-from http.cookies import SimpleCookie
 from typing import Optional
 
 from django.conf import settings
-from sentry_sdk import set_tag
 
 
 if typing.TYPE_CHECKING:
@@ -17,13 +15,11 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-
 def traces_sampler(sampling_context):
     if sampling_context.get("wsgi_environ", {}).get("PATH_INFO") == "/healthcheck/":
         return 0.0
 
     return settings.SENTRY_TRACES_SAMPLE_RATE
-
 
 
 def before_send_transaction(event: Event, hint: Hint) -> Optional[Event]:

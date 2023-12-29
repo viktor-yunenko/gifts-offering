@@ -1,10 +1,9 @@
 import strawberry
-from strawberry.types import Info
 from strawberry_django import auth
 from strawberry_django import mutations
 
-from gifts.apps.auth.types import UserType
-from gifts.apps.auth.types import UserTypeInput
+from gifts.apps.auth.graphql.types import UserType
+from gifts.apps.auth.graphql.types import UserTypeInput
 
 
 @strawberry.type

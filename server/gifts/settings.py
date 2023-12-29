@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "anymail",
     "simple_history",
     "strawberry_django",
+    "gifts.apps.gifts",
 ]
 
 static_service_middleware = "whitenoise.middleware.WhiteNoiseMiddleware"
@@ -206,12 +207,12 @@ else:
             conn_max_age=600,
             default=env.str("DATABASE_URL"),
         )
-                   | {  # Required for tests with unicode data to work: https://code.djangoproject.com/ticket/27061
-                       "TEST": {
-                           "CHARSET": "UTF8",
-                           "TEMPLATE": "template0",
-                       }
-                   }
+        | {  # Required for tests with unicode data to work: https://code.djangoproject.com/ticket/27061
+            "TEST": {
+                "CHARSET": "UTF8",
+                "TEMPLATE": "template0",
+            }
+        }
     }
 
 LANGUAGE_CODE = "en-us"

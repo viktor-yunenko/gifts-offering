@@ -1,7 +1,91 @@
+"""
+Can only be resolved by authenticated users.
+
+When the condition fails, the following can be returned (following this priority):
+1) `OperationInfo`/`OperationMessage` if those types are allowed at the return type
+2) `null` in case the field is not mandatory (e.g. `String` or `[String]`)
+3) An empty list in case the field is a list (e.g. `[String]!`)
+4) An empty `Connection` in case the return type is a relay connection
+2) Otherwise, an error will be raised
+"""
+directive @IsAuthenticated repeatable on FIELD_DEFINITION
+
 """Date with time (isoformat)"""
 scalar DateTime
 
+"""Decimal (fixed-point)"""
+scalar Decimal
+
+type DjangoImageType {
+  height: Int!
+  name: String!
+  path: String!
+  size: Int!
+  url: String!
+  width: Int!
+}
+
+type DjangoModelType {
+  pk: ID!
+}
+
+type GiftImageType {
+  caption: String!
+  created_at: DateTime!
+  gift: GiftType!
+  id: ID!
+  image: DjangoImageType!
+  updated_at: DateTime!
+}
+
+input GiftOrderInput {
+  created_at: DateTime
+  gift: OneToManyInput!
+  id: ID
+  is_confirmed_by_admin: Boolean
+  updated_at: DateTime
+  user: OneToManyInput!
+}
+
+type GiftOrderType {
+  created_at: DateTime!
+  gift: GiftType!
+  id: ID!
+  is_confirmed_by_admin: Boolean!
+  updated_at: DateTime!
+  user: UserType!
+}
+
+type GiftType {
+  created_at: DateTime!
+  description_full: String!
+  description_short: String!
+  fit_confidence: Decimal!
+  id: ID!
+  image_card: DjangoImageType!
+  is_accepted: Boolean!
+  is_published: Boolean!
+  name: String!
+  points: Decimal!
+  updated_at: DateTime!
+  user: DjangoModelType!
+}
+
+type Mutation {
+  gift_order_create(data: GiftOrderInput!): GiftOrderType!
+}
+
+input OneToManyInput {
+  set: ID
+}
+
 type Query {
+  gift(pk: ID!): GiftType!
+  gift_image(pk: ID!): GiftImageType!
+  gift_images: [GiftImageType!]!
+  gift_order(pk: ID!): GiftOrderType!
+  gift_orders: [GiftOrderType!]!
+  gifts: [GiftType!]!
   user_current: UserType
 }
 
@@ -16,4 +100,5 @@ type UserType {
   last_login: DateTime
   last_name: String!
   password: String!
+  points: Decimal!
 }

@@ -9,14 +9,14 @@
 			"recommended": true,
 			"suspicious": {
 				"noAssignInExpressions": "off",
-				"noExplicitAny": "warn"
+				"noExplicitAny": "warn",
+				"noExtraNonNullAssertion": "off"
 			},
 			"nursery": {
 				"noUnusedImports": "warn"
 			},
 			"style": {
-				"noNonNullAssertion": "off",
-				"noParameterAssign": "off"
+				"noNonNullAssertion": "off"
 			}
 		}
 	},
@@ -30,6 +30,7 @@
 			"biome.json",
 			"nuxt.config.ts",
 			"graphql/"
-		]
+		],
+		"ignore": ["graphql/", ".nuxt/"]
 	}
 }

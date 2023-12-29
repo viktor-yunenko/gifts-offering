@@ -37,9 +37,9 @@ class UserAdmin(UserAdmin):
                     "password",
                     "first_name",
                     "last_name",
+                    "points",
                     "last_login",
                     "date_joined",
-
                 ],
             },
         ),

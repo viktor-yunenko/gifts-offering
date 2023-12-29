@@ -1,6 +1,7 @@
 import logging
 
 import strawberry
+import strawberry_django
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from graphql import GraphQLError
@@ -10,11 +11,16 @@ from strawberry.extensions import ParserCache
 from strawberry.extensions import ValidationCache
 from strawberry.schema.config import StrawberryConfig
 from strawberry.types import ExecutionContext
+from strawberry_django import mutations
 from strawberry_django.auth import current_user
 from strawberry_django.optimizer import DjangoOptimizerExtension
 from strawberry_django.permissions import IsAuthenticated
 
-from gifts.apps.auth.types import UserType
+from gifts.apps.auth.graphql.types import UserType
+from gifts.apps.gifts.graphql.types import GiftImageType
+from gifts.apps.gifts.graphql.types import GiftOrderInput
+from gifts.apps.gifts.graphql.types import GiftOrderType
+from gifts.apps.gifts.graphql.types import GiftType
 
 
 logger = logging.getLogger(__name__)
@@ -25,6 +31,20 @@ auth_required = IsAuthenticated()
 @strawberry.type
 class Query:
     user_current: UserType | None = current_user()
+
+    gift: GiftType = strawberry_django.field(extensions=[auth_required])
+    gifts: list[GiftType] = strawberry_django.field(extensions=[auth_required])
+
+    gift_image: GiftImageType = strawberry_django.field(extensions=[auth_required])
+    gift_images: list[GiftImageType] = strawberry_django.field(extensions=[auth_required])
+
+    gift_order: GiftOrderType = strawberry_django.field(extensions=[auth_required])
+    gift_orders: list[GiftOrderType] = strawberry_django.field(extensions=[auth_required])
+
+
+@strawberry.type
+class Mutation:
+    gift_order_create: GiftOrderType = mutations.create(GiftOrderInput)
 
 
 class ErrorLoggingSchema(strawberry.Schema):
@@ -65,8 +85,9 @@ if not settings.DEBUG:
 
 schema = ErrorLoggingSchema(
     query=Query,
+    mutation=Mutation,
     extensions=schema_extensions,
     config=StrawberryConfig(
         auto_camel_case=False,
-    )
+    ),
 )

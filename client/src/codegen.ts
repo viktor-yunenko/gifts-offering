@@ -6,7 +6,7 @@ export default ({
 	generates: {
 		"./graphql/": {
 			preset: "client",
-			documents: ["./**/*.tsx"],
+			documents: ["./src/**/*.tsx", "./src/**/*.ts"],
 			config: {
 				useTypeImports: true,
 			},

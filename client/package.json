@@ -17,6 +17,7 @@
     "@nuxtjs/apollo": "next",
     "@sentry/vue": "^7.91.0",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "marked": "^11.1.0",
     "nuxt": "^3.9.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5"

@@ -48,6 +48,7 @@
     markdownify = "^0.11.6"
     twisted = {extras = ["http2", "tls"], version = "^23.10.0"}
     daphne = "^4.0.0"
+    pillow = "^10.1.0"
 
 [tool.poetry.group.dev.dependencies]
     pytest = "^7.4.3"
