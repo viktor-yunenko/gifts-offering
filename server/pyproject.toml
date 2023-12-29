@@ -1,0 +1,144 @@
+[build-system]
+    requires = ["poetry-core>=1.0.0"]
+    build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+    name = "gifts"
+    version = "0.1.0"
+    description = ""
+    authors = []
+
+[tool.poetry.dependencies]
+    python = "~3.12"
+    django = "^5.0.0"
+    django-allauth = "^0.55.0"
+    django-enumfields = "^2.1.1"
+    django-choices-field = "^2.2.2" # same as django-enumfields but works with strawberry-graphql
+    django-adminutils = "^0.0.16"
+    django-admin-sortable2 = "^2.0"
+    django-admin-hstore-widget = "^1.2.0"
+    django-select2-admin-filters = "^0.1.4"
+    django-select2 = "^8.0.0"
+    django-object-actions = "^4.1.0"
+    django-fieldsignals = "^0.7.0"
+    django-cors-headers = "^4.3.1"
+    dj-database-url = "^2.1.0"
+    django-simple-history = "^3.3.0"
+    django-autoslug = "^1.9.8"
+    django-debug-toolbar = "^4.2.0"
+    pyflame = "^0.3.1"
+    django-health-check = "^3.17.0"
+    django-admin-autocomplete-filter = "^0.7.1"
+    django-hijack = "^3.4.3"
+    django-anymail = "^10.2"
+    django-extensions = "^3.2.3" # for shell_plus
+        ipython = "^8.14.0"
+    strawberry-graphql = {extras = ["channels"], version = "^0.217.0"}
+    strawberry-graphql-django = "^0.28.3"
+
+    python-environ = "^0.4.54"
+    python-dotenv = "^1.0.0"
+    python-dateutil = "^2.8.2"
+    requests = "^2.31.0"
+    sentry-sdk = "^1.39.1"
+    whitenoise = "^6.5.0"
+    humanize = "^4.4.0"
+    faker = "^19.3.0"
+    psycopg = "^3.1.16"
+    markdownify = "^0.11.6"
+    twisted = {extras = ["http2", "tls"], version = "^23.10.0"}
+    daphne = "^4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+    pytest = "^7.4.3"
+        pytest-watch = "^4.2.0"
+        pytest-mock = "^3.10.0"
+        pytest-django = "^4.6.0"
+        pytest-rich = "^0.1.1" # for colored output
+        pytest-pspec = "^0.0.4" # for naming tests with docstrings
+    freezegun = "^1.2.2"
+    ruff = "^0.1.6"
+
+[tool.pytest.ini_options]
+    DJANGO_SETTINGS_MODULE = "gifts.settings"
+    python_files = ["test_*.py", "*_test.py"]
+    addopts = [
+        "--no-migrations",
+        "--capture=no", # show print() stdout
+        "--color=yes",
+        "--code-highlight=yes",
+        "--no-header",
+        "--pspec", # allows to use docstrings instead of test function names
+    ]
+
+[tool.ruff]
+    target-version = "py312"
+    line-length = 97
+
+[tool.ruff.isort]
+    force-single-line = true
+    lines-after-imports = 2
+
+[tool.ruff.isort.sections]
+    "gifts" = ["gifts"]
+
+[tool.ruff.lint]
+    # This is just every single tool from https://docs.astral.sh/ruff/rules/
+    # Hopefully, we can enable them one by one over time.
+    select = [
+        # Pyflakes (F)
+        "F",
+        # pycodestyle (E, W)
+        "E",
+        "W",
+        # mccabe (C90)
+        # "C90",
+        # isort (I)
+        "I",
+        # flake8-2020 (YTT)
+        "YTT",
+        # flake8-async (ASYNC)
+        "ASYNC",
+        # flake8-debugger (T10)
+        "T10",
+        # flake8-executable (EXE)
+        "EXE",
+        # flake8-future-annotations (FA)
+        "FA",
+        # flake8-implicit-str-concat (ISC)
+        "ISC",
+        # flake8-import-conventions (ICN)
+        "ICN",
+        # flake8-pyi (PYI)
+        "PYI",
+        # flake8-quotes (Q)
+        "Q",
+        # flake8-slots (SLOT)
+        "SLOT",
+        # flake8-tidy-imports (TID)
+        "TID",
+        # flake8-gettext (INT)
+        "INT",
+        # flynt (FLY)
+        "FLY",
+        # NumPy-specific rules (NPY)
+        "NPY",
+        # Airflow (AIR)
+        "AIR",
+    ]
+    ignore = [
+        # redundant string types check
+        "F821",
+        # usless and annoying string length check
+        "E501",
+        # Do not compare types, use `isinstance()`
+        "E721",
+        # ignore unused vars as they're used as comments
+        "F841",
+        # Checks for implicitly concatenated strings on a single line.
+        "ISC001",
+        # the rule for multi-line string indent - sounds useless,
+        # use textwrap.dedent() - it's your responsibility. and flake8 fault for not detecting dedent()
+        "W291",
+        "W293",
+    ]

@@ -1,0 +1,153 @@
+:root {
+  box-sizing: border-box;
+  --momentum-gray-400: #e2e8f0;
+  --momentum-300: #7381ea;
+  --momentum-400: #7381ea;
+  --momentum-500: #5d6ad1;
+  --momentum-600: #3f4fc9;
+  --momentum-700: #3847c3;
+  --momentum-800: #181E70;
+  --momentum-900: #0f1d58;
+  --legal-gray: #a2a2a2;
+  --error-red: #e53e3e;
+}
+
+*, ::before, ::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: Mulish, Arial;
+  color: var(--momentum-900);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+a {
+  text-decoration: none;
+  font-size: .9375rem;
+  font-weight: 600;
+}
+
+a:link, a:visited {
+  color: var(--momentum-500);
+}
+
+a:hover {
+  color: var(--momentum-700);
+}
+
+a:active {
+  color: var(--momentum-900);
+}
+
+button {
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: .3125em;
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 1em;
+  border: none;
+  margin: 1em 0;
+}
+
+button.primaryAction {
+  color: white;
+  background-color: var(--momentum-500);
+}
+
+.nav-bar {
+  display: flex;
+  padding: 1em;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--momentum-gray-400) 1px solid;
+}
+
+.nav-bar > img {
+}
+
+main {
+  margin: 0 auto;
+  padding: 0 1em;
+  max-width: 400px;
+}
+
+form > p {
+  display: block;
+  margin: 2em 0;
+}
+
+form label {
+  display: block;
+  font-size: .875rem;
+  margin: 0.5em 0;
+}
+
+form input {
+  display: block;
+  border: 1px solid var(--momentum-gray-400);
+  padding: 1em;
+  width: 100%;
+  border-radius: 0.25em;
+  font-size: 1.125rem;
+}
+
+form > .forgot-password {
+  margin-top: -1em;
+}
+
+form > button {
+  margin-top: 2em;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin: 1.5em;
+}
+
+.or-divider > span {
+  width: 100%;
+  height: 1px;
+  background: rgb(216, 216, 216);
+}
+
+.or-divider > p {
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.disclaimer {
+  margin-top: 3em;
+  color: var(--legal-gray);
+  font-size: .625rem;
+}
+
+.disclaimer a {
+  font-size: inherit;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.errorlist {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.errorlist > li {
+  color: var(--error-red);
+}

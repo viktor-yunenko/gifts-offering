@@ -1,0 +1,19 @@
+"""Date with time (isoformat)"""
+scalar DateTime
+
+type Query {
+  user_current: UserType
+}
+
+type UserType {
+  date_joined: DateTime!
+  email: String!
+  first_name: String!
+  id: ID!
+  is_active: Boolean!
+  is_staff: Boolean!
+  is_superuser: Boolean!
+  last_login: DateTime
+  last_name: String!
+  password: String!
+}

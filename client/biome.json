@@ -1,0 +1,35 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "warn"
+			},
+			"nursery": {
+				"noUnusedImports": "warn"
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "off"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true
+	},
+	"files": {
+		"include": [
+			"src/",
+			"package.json",
+			"biome.json",
+			"nuxt.config.ts",
+			"graphql/"
+		]
+	}
+}

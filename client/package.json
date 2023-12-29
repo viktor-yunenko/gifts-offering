@@ -1,0 +1,30 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "format": "biome format --write . && biome check --apply .",
+    "codegen": "graphql-codegen --config src/codegen.ts"
+  },
+  "dependencies": {
+    "@chakra-ui/nuxt-next": "~2.1.0-beta.12",
+    "@chakra-ui/vue-next": "^2.1.0-beta.11",
+    "@nuxtjs/apollo": "next",
+    "@sentry/vue": "^7.91.0",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "nuxt": "^3.9.0",
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.4.1",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@pandacss/dev": "^0.23.0"
+  }
+}
