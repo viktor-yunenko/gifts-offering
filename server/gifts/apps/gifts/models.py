@@ -1,13 +1,21 @@
+import strawberry
 from django.db import models
+from django.db.models import TextChoices
+from django_choices_field import TextChoicesField
 from simple_history.models import HistoricalRecords
 
 from gifts.apps.auth.models import User
 
 
-class MonitoredModel(models.Model):
+class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        abstract = True
+
+
+class MonitoredModel(TimeStampedModel):
     history = HistoricalRecords(inherit=True)
 
     class Meta:
@@ -40,12 +48,29 @@ class GiftImage(MonitoredModel):
         return self.caption
 
 
-class GiftOrder(MonitoredModel):
+@strawberry.enum()
+class OrderStatus(TextChoices):
+    PENDING = "pending"
+    WITHDRAWN = "withdrawn"
+    CONFIRMED = "confirmed"
+
+
+class GiftOrder(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    gift = models.ForeignKey(
-        Gift, on_delete=models.CASCADE, related_name="orders", related_query_name="order"
+    gift = models.OneToOneField(
+        Gift,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_query_name="order",
+        related_name="order",
     )
-    is_confirmed_by_admin = models.BooleanField(default=False)
+    status = TextChoicesField(OrderStatus, default=OrderStatus.PENDING)
+
+    # exclude as O2O aren't working well with history
+    # https://github.com/jazzband/django-simple-history/issues/1031
+    # https://github.com/jazzband/django-simple-history/issues/1278
+    history = HistoricalRecords(excluded_fields=["gift"])
 
     def __str__(self):
-        return f"{self.user} - {self.gift}"
+        return f"{self.user} | {self.gift} | {self.status}"

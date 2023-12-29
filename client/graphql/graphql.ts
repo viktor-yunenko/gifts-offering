@@ -45,21 +45,12 @@ export type GiftImageType = {
   updated_at: Scalars['DateTime']['output'];
 };
 
-export type GiftOrderInput = {
-  created_at?: InputMaybe<Scalars['DateTime']['input']>;
-  gift: OneToManyInput;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  is_confirmed_by_admin?: InputMaybe<Scalars['Boolean']['input']>;
-  updated_at?: InputMaybe<Scalars['DateTime']['input']>;
-  user: OneToManyInput;
-};
-
 export type GiftOrderType = {
   __typename?: 'GiftOrderType';
   created_at: Scalars['DateTime']['output'];
   gift: GiftType;
   id: Scalars['ID']['output'];
-  is_confirmed_by_admin: Scalars['Boolean']['output'];
+  status: OrderStatus;
   updated_at: Scalars['DateTime']['output'];
   user: UserType;
 };
@@ -72,10 +63,9 @@ export type GiftType = {
   fit_confidence: Scalars['Decimal']['output'];
   id: Scalars['ID']['output'];
   image_card: DjangoImageType;
-  image_card_url: Scalars['String']['output'];
-  is_accepted: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
+  order?: Maybe<GiftOrderType>;
   points: Scalars['Decimal']['output'];
   updated_at: Scalars['DateTime']['output'];
   user: DjangoModelType;
@@ -83,17 +73,25 @@ export type GiftType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  gift_order_create: GiftOrderType;
+  gift_order_submit: GiftOrderType;
+  gift_order_withdraw: GiftOrderType;
 };
 
 
-export type MutationGift_Order_CreateArgs = {
-  data: GiftOrderInput;
+export type MutationGift_Order_SubmitArgs = {
+  gift_id: Scalars['ID']['input'];
 };
 
-export type OneToManyInput = {
-  set?: InputMaybe<Scalars['ID']['input']>;
+
+export type MutationGift_Order_WithdrawArgs = {
+  gift_id: Scalars['ID']['input'];
 };
+
+export enum OrderStatus {
+  Confirmed = 'CONFIRMED',
+  Pending = 'PENDING',
+  Withdrawn = 'WITHDRAWN'
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -139,15 +137,21 @@ export type UserType = {
 export type GiftsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GiftsQuery = { __typename?: 'Query', gifts: Array<{ __typename?: 'GiftType', id: string, name: string, image_card_url: string, description_short: string, points: any, fit_confidence: any, is_accepted: boolean, image_card: { __typename?: 'DjangoImageType', path: string, url: string } }> };
+export type GiftsQuery = { __typename?: 'Query', gifts: Array<{ __typename?: 'GiftType', id: string, name: string, description_short: string, points: any, fit_confidence: any, image_card: { __typename?: 'DjangoImageType', path: string, url: string }, order?: { __typename?: 'GiftOrderType', id: string, status: OrderStatus } | null }> };
 
-export type GiftOrderMutationVariables = Exact<{
+export type GiftOrderSubmitMutationVariables = Exact<{
   giftId: Scalars['ID']['input'];
-  userId: Scalars['ID']['input'];
 }>;
 
 
-export type GiftOrderMutation = { __typename?: 'Mutation', gift_order_create: { __typename?: 'GiftOrderType', id: string } };
+export type GiftOrderSubmitMutation = { __typename?: 'Mutation', gift_order_submit: { __typename?: 'GiftOrderType', id: string } };
+
+export type GiftOrderWithdrawMutationVariables = Exact<{
+  giftId: Scalars['ID']['input'];
+}>;
+
+
+export type GiftOrderWithdrawMutation = { __typename?: 'Mutation', gift_order_withdraw: { __typename?: 'GiftOrderType', id: string } };
 
 export type UserCurrentQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -155,6 +159,7 @@ export type UserCurrentQueryVariables = Exact<{ [key: string]: never; }>;
 export type UserCurrentQuery = { __typename?: 'Query', user_current?: { __typename?: 'UserType', id: string, first_name: string, points: any } | null };
 
 
-export const GiftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image_card"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"path"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"image_card_url"}},{"kind":"Field","name":{"kind":"Name","value":"description_short"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"fit_confidence"}},{"kind":"Field","name":{"kind":"Name","value":"is_accepted"}}]}}]}}]} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
-export const GiftOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_create"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"gift"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"user"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderMutation, GiftOrderMutationVariables>;
+export const GiftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image_card"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"path"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description_short"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"fit_confidence"}},{"kind":"Field","name":{"kind":"Name","value":"order"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
+export const GiftOrderSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_submit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderSubmitMutation, GiftOrderSubmitMutationVariables>;
+export const GiftOrderWithdrawDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderWithdraw"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_withdraw"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderWithdrawMutation, GiftOrderWithdrawMutationVariables>;
 export const UserCurrentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserCurrent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_current"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"points"}}]}}]}}]} as unknown as DocumentNode<UserCurrentQuery, UserCurrentQueryVariables>;

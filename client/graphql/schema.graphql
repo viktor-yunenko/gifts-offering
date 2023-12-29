@@ -17,12 +17,12 @@ scalar DateTime
 scalar Decimal
 
 type DjangoImageType {
+  height: Int!
   name: String!
   path: String!
   size: Int!
   url: String!
   width: Int!
-  height: Int!
 }
 
 type DjangoModelType {
@@ -30,75 +30,69 @@ type DjangoModelType {
 }
 
 type GiftImageType {
+  caption: String!
+  created_at: DateTime!
   gift: GiftType!
   id: ID!
-  created_at: DateTime!
-  updated_at: DateTime!
   image: DjangoImageType!
-  caption: String!
-}
-
-input GiftOrderInput {
-  gift: OneToManyInput!
-  user: OneToManyInput!
-  id: ID
-  created_at: DateTime
-  updated_at: DateTime
-  is_confirmed_by_admin: Boolean
+  updated_at: DateTime!
 }
 
 type GiftOrderType {
-  gift: GiftType!
-  user: UserType!
-  id: ID!
   created_at: DateTime!
+  gift: GiftType!
+  id: ID!
+  status: OrderStatus!
   updated_at: DateTime!
-  is_confirmed_by_admin: Boolean!
+  user: UserType!
 }
 
 type GiftType {
-  id: ID!
   created_at: DateTime!
+  description_full: String!
+  description_short: String!
+  fit_confidence: Decimal!
+  id: ID!
+  image_card: DjangoImageType!
+  is_published: Boolean!
+  name: String!
+  order: GiftOrderType
+  points: Decimal!
   updated_at: DateTime!
   user: DjangoModelType!
-  name: String!
-  description_short: String!
-  description_full: String!
-  image_card: DjangoImageType!
-  fit_confidence: Decimal!
-  points: Decimal!
-  is_published: Boolean!
-  is_accepted: Boolean!
 }
 
 type Mutation {
-  gift_order_create(data: GiftOrderInput!): GiftOrderType!
+  gift_order_submit(gift_id: ID!): GiftOrderType!
+  gift_order_withdraw(gift_id: ID!): GiftOrderType!
 }
 
-input OneToManyInput {
-  set: ID
+enum OrderStatus {
+  CONFIRMED
+  PENDING
+  WITHDRAWN
 }
 
 type Query {
+  gift(pk: ID!): GiftType!
+  gift_image(pk: ID!): GiftImageType!
+  gift_images: [GiftImageType!]!
+  gift_order(pk: ID!): GiftOrderType!
+  gift_orders: [GiftOrderType!]!
+  gifts: [GiftType!]!
   user_current: UserType
-  gift(pk: ID!): GiftType! @IsAuthenticated
-  gifts: [GiftType!]! @IsAuthenticated
-  gift_image(pk: ID!): GiftImageType! @IsAuthenticated
-  gift_images: [GiftImageType!]! @IsAuthenticated
-  gift_order(pk: ID!): GiftOrderType! @IsAuthenticated
-  gift_orders: [GiftOrderType!]! @IsAuthenticated
 }
 
 type UserType {
-  id: ID!
-  password: String!
-  last_login: DateTime
-  is_superuser: Boolean!
-  is_staff: Boolean!
-  is_active: Boolean!
   date_joined: DateTime!
   email: String!
   first_name: String!
+  id: ID!
+  is_active: Boolean!
+  is_staff: Boolean!
+  is_superuser: Boolean!
+  last_login: DateTime
   last_name: String!
+  password: String!
   points: Decimal!
 }

@@ -3,25 +3,30 @@ import { CAlert, CBox, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { marked } from "marked";
 import { defineComponent } from "vue";
-import { useAuth } from "~/composables/useAuth";
 import { gql } from "#graphql";
+import { OrderStatus } from "#graphql/graphql";
 import { useLoadingIndicator } from "#imports";
 
 export const Homepage = defineComponent({
 	setup() {
-		const auth = useAuth();
 		const loadingIndicator = useLoadingIndicator();
-		const { result, error, loading, refetch } = useQuery(GIFTS_QUERY);
-		const { mutate: createGiftOrder } = useMutation(GIFT_ORDER_CREATE);
+		const { result } = useQuery(GIFTS_QUERY);
+		const { mutate: submitGiftOrder } = useMutation(GIFT_ORDER_SUBMIT, {
+			refetchQueries: () => [{ query: GIFTS_QUERY }],
+		});
+		const { mutate: withdrawGiftOrder } = useMutation(GIFT_ORDER_WITHDRAW, {
+			refetchQueries: () => [{ query: GIFTS_QUERY }],
+		});
 
-		async function onGiftOrderCreateClick(giftId: string) {
+		async function onGiftOrderSubmit(giftId: string) {
 			loadingIndicator.start();
-			await createGiftOrder({
-				giftId,
-				// biome-ignore lint/style/noNonNullAssertion:
-				userId: auth?.user()?.id!,
-			});
-			refetch();
+			await submitGiftOrder({ giftId });
+			loadingIndicator.finish();
+		}
+
+		async function onGiftOrderWithdraw(giftId: string) {
+			loadingIndicator.start();
+			await withdrawGiftOrder({ giftId });
 			loadingIndicator.finish();
 		}
 
@@ -29,7 +34,7 @@ export const Homepage = defineComponent({
 			<CBox>
 				<CVStack gap="10">
 					{result.value?.gifts.map((gift) => (
-						<CBox key={gift.id + gift.is_accepted}>
+						<CBox key={`${gift.id}-${gift.order?.status}`}>
 							<CHeading size="md">{gift.name}</CHeading>
 							<CBox
 								innerHTML={marked.parse(gift.description_short) as string}
@@ -37,13 +42,27 @@ export const Homepage = defineComponent({
 							<CBox>{gift.points}</CBox>
 							<CBox>{gift.fit_confidence}</CBox>
 							<CImage src={`http://localhost:8000${gift.image_card.url}`} />
-							<CButton
-								onClick={() => onGiftOrderCreateClick(gift.id)}
-								loading={loadingIndicator.isLoading}
-							>
-								Accept it!
-							</CButton>
-							{gift.is_accepted && <CAlert type="success">Accepted!</CAlert>}
+							{gift.order?.status !== OrderStatus.Pending && (
+								<CButton
+									onClick={() => onGiftOrderSubmit(gift.id)}
+									loading={loadingIndicator.isLoading}
+								>
+									Yup, it's a good one
+								</CButton>
+							)}
+							{gift.order?.status === OrderStatus.Pending && (
+								<CButton
+									onClick={() => onGiftOrderWithdraw(gift.id)}
+									loading={loadingIndicator.isLoading}
+								>
+									Maybe nah
+								</CButton>
+							)}
+							{gift.order?.status === OrderStatus.Pending && (
+								<CAlert type="success">
+									I'll reach out with a confirmation soon!
+								</CAlert>
+							)}
 						</CBox>
 					))}
 				</CVStack>
@@ -61,18 +80,28 @@ const GIFTS_QUERY = gql(`
 				path
 				url
 			}
-			image_card_url
 			description_short
 			points
 			fit_confidence
-			is_accepted
+			order {
+				id
+				status
+			}
 		}
 	}
 `);
 
-const GIFT_ORDER_CREATE = gql(`
-	mutation GiftOrder($giftId: ID!, $userId: ID!) {
-    gift_order_create(data: { gift: { set: $giftId }, user: { set: $userId } }) {
+const GIFT_ORDER_SUBMIT = gql(`
+	mutation GiftOrderSubmit($giftId: ID!) {
+    gift_order_submit(gift_id: $giftId) {
+      id
+    }
+  }
+`);
+
+const GIFT_ORDER_WITHDRAW = gql(`
+	mutation GiftOrderWithdraw($giftId: ID!) {
+    gift_order_withdraw(gift_id: $giftId) {
       id
     }
   }

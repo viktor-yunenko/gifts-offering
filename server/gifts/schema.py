@@ -11,14 +11,13 @@ from strawberry.extensions import ParserCache
 from strawberry.extensions import ValidationCache
 from strawberry.schema.config import StrawberryConfig
 from strawberry.types import ExecutionContext
-from strawberry_django import mutations
 from strawberry_django.auth import current_user
 from strawberry_django.optimizer import DjangoOptimizerExtension
 from strawberry_django.permissions import IsAuthenticated
 
 from gifts.apps.auth.graphql.types import UserType
+from gifts.apps.gifts.graphql.mutations import GiftsMutation
 from gifts.apps.gifts.graphql.types import GiftImageType
-from gifts.apps.gifts.graphql.types import GiftOrderInput
 from gifts.apps.gifts.graphql.types import GiftOrderType
 from gifts.apps.gifts.graphql.types import GiftType
 
@@ -43,8 +42,8 @@ class Query:
 
 
 @strawberry.type
-class Mutation:
-    gift_order_create: GiftOrderType = mutations.create(GiftOrderInput)
+class Mutation(GiftsMutation):
+    pass
 
 
 class ErrorLoggingSchema(strawberry.Schema):

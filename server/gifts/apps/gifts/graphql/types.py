@@ -1,4 +1,5 @@
-import strawberry
+from __future__ import annotations
+
 import strawberry_django
 from django.db.models import QuerySet
 from strawberry.types import Info
@@ -11,13 +12,11 @@ from gifts.apps.gifts.models import GiftOrder
 
 @strawberry_django.type(Gift, fields="__all__")
 class GiftType:
+    order: GiftOrderType | None
+
     @classmethod
     def get_queryset(cls, queryset: QuerySet[Gift], info: Info) -> QuerySet[Gift]:
         return queryset.filter(user=info.context.request.user)
-
-    @strawberry.field()
-    def is_accepted(self: Gift, info: Info) -> bool:
-        return self.orders.filter(user=info.context.request.user).aexists()
 
 
 @strawberry_django.type(GiftOrder, fields="__all__")
