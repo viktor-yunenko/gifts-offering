@@ -3,6 +3,11 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -13,7 +18,8 @@
 				"noExtraNonNullAssertion": "off"
 			},
 			"nursery": {
-				"noUnusedImports": "warn"
+				"noUnusedImports": "warn",
+				"noImplicitAnyLet": "off"
 			},
 			"style": {
 				"noNonNullAssertion": "off"
@@ -31,6 +37,6 @@
 			"nuxt.config.ts",
 			"graphql/"
 		],
-		"ignore": ["graphql/", ".nuxt/"]
+		"ignore": ["graphql/", ".nuxt/", "biome.json"]
 	}
 }
