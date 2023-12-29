@@ -17,5 +17,8 @@
 	},
 	"formatter": {
 		"enabled": true
+	},
+	"files": {
+		"include": ["src/", "package.json", "biome.json", "nuxt.config.ts"]
 	}
 }

@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "format": "biome format --write src/ && biome check --apply src/"
+    "format": "biome format --write . && biome check --apply ."
   },
   "dependencies": {
     "@chakra-ui/nuxt-next": "~2.1.0-beta.12",
