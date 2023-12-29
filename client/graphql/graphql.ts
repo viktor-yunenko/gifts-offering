@@ -72,6 +72,7 @@ export type GiftType = {
   fit_confidence: Scalars['Decimal']['output'];
   id: Scalars['ID']['output'];
   image_card: DjangoImageType;
+  image_card_url: Scalars['String']['output'];
   is_accepted: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
@@ -135,15 +136,10 @@ export type UserType = {
   points: Scalars['Decimal']['output'];
 };
 
-export type UserCurrentQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserCurrentQuery = { __typename?: 'Query', user_current?: { __typename?: 'UserType', id: string, first_name: string, points: any } | null };
-
 export type GiftsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GiftsQuery = { __typename?: 'Query', gifts: Array<{ __typename?: 'GiftType', id: string, name: string, description_short: string, points: any, fit_confidence: any, is_accepted: boolean, image_card: { __typename?: 'DjangoImageType', url: string } }> };
+export type GiftsQuery = { __typename?: 'Query', gifts: Array<{ __typename?: 'GiftType', id: string, name: string, image_card_url: string, description_short: string, points: any, fit_confidence: any, is_accepted: boolean, image_card: { __typename?: 'DjangoImageType', path: string, url: string } }> };
 
 export type GiftOrderMutationVariables = Exact<{
   giftId: Scalars['ID']['input'];
@@ -153,7 +149,12 @@ export type GiftOrderMutationVariables = Exact<{
 
 export type GiftOrderMutation = { __typename?: 'Mutation', gift_order_create: { __typename?: 'GiftOrderType', id: string } };
 
+export type UserCurrentQueryVariables = Exact<{ [key: string]: never; }>;
 
-export const UserCurrentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserCurrent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_current"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"points"}}]}}]}}]} as unknown as DocumentNode<UserCurrentQuery, UserCurrentQueryVariables>;
-export const GiftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image_card"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description_short"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"fit_confidence"}},{"kind":"Field","name":{"kind":"Name","value":"is_accepted"}}]}}]}}]} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
+
+export type UserCurrentQuery = { __typename?: 'Query', user_current?: { __typename?: 'UserType', id: string, first_name: string, points: any } | null };
+
+
+export const GiftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image_card"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"path"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"image_card_url"}},{"kind":"Field","name":{"kind":"Name","value":"description_short"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"fit_confidence"}},{"kind":"Field","name":{"kind":"Name","value":"is_accepted"}}]}}]}}]} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
 export const GiftOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_create"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"gift"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"user"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderMutation, GiftOrderMutationVariables>;
+export const UserCurrentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserCurrent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_current"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"points"}}]}}]}}]} as unknown as DocumentNode<UserCurrentQuery, UserCurrentQueryVariables>;

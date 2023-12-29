@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.db import DEFAULT_DB_ALIAS
 from django.db import connections
@@ -40,13 +41,12 @@ urlpatterns = [
     ),
     path("healthcheck/", healthcheck_view),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
 
 if settings.DJANGO_ENV in (DjangoEnv.LOCAL, DjangoEnv.BUILD):
-    from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
