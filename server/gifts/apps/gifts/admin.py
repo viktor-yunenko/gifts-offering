@@ -11,11 +11,17 @@ class GiftAdmin(SimpleHistoryAdmin):
     list_display = [
         "name",
         "points",
+        "fit_confidence",
+        "is_published",
+        "created_at",
+        "updated_at",
         "description_short",
+    ]
+    list_filter = [
+        "is_published",
         "created_at",
         "updated_at",
     ]
-    list_filter = ["created_at", "updated_at"]
     search_fields = ["name", "description"]
 
 

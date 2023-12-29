@@ -10,7 +10,7 @@ export function useAuth() {
 	};
 }
 
-const USER_QUERY = gql(`
+export const USER_QUERY = gql(`
 	query UserCurrent {
 		user_current {
 			id

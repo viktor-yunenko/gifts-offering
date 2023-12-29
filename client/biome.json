@@ -14,7 +14,7 @@
 			"recommended": true,
 			"suspicious": {
 				"noAssignInExpressions": "off",
-				"noExplicitAny": "warn",
+				"noExplicitAny": "off",
 				"noExtraNonNullAssertion": "off"
 			},
 			"nursery": {
