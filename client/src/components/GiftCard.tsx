@@ -1,0 +1,174 @@
+import { CButton } from "@chakra-ui/c-button";
+import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
+import { captureException } from "@sentry/vue";
+import { useMutation } from "@vue/apollo-composable";
+import { marked } from "marked";
+import { defineComponent, ref, watch } from "vue";
+import type { PropType } from "vue";
+import ConfettiExplosion from "vue-confetti-explosion";
+// @ts-ignore
+import { POSITION, TYPE } from "vue-toastification";
+import { GIFTS_QUERY } from "~/components/Homepage";
+import { USER_QUERY } from "~/composables/useAuth";
+import { gql } from "#graphql";
+import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
+import { useLoadingIndicator, useNotify } from "#imports";
+import "./points-limit-toast.scss";
+
+export const GiftCard = defineComponent({
+	props: {
+		gift: {
+			type: Object as PropType<GiftsQuery["gifts"][number]>,
+			required: true,
+		},
+	},
+
+	setup(props: { gift: GiftsQuery["gifts"][number] }) {
+		const loadingIndicator = useLoadingIndicator();
+		const notify = useNotify();
+
+		const confettiTrigger = ref(0);
+		const isOrderPending = ref(false);
+
+		const gift = props.gift;
+
+		watch(
+			() => props.gift.order?.status,
+			(status) => {
+				isOrderPending.value = status === OrderStatus.Pending;
+			},
+			{ immediate: true },
+		);
+
+		const refetchQueries = () => [
+			{ query: GIFTS_QUERY },
+			{ query: USER_QUERY },
+		];
+		const { mutate: submitGiftOrder, error: submitError } = useMutation(
+			GIFT_ORDER_SUBMIT,
+			{ refetchQueries },
+		);
+		const { mutate: withdrawGiftOrder, error: withdrawError } = useMutation(
+			GIFT_ORDER_WITHDRAW,
+			{ refetchQueries },
+		);
+
+		async function onGiftOrderRequest(
+			giftId: string,
+			request: "submit" | "withdraw",
+			options?: { isIgnorePointsBalance: boolean },
+		) {
+			loadingIndicator.start();
+			try {
+				if (request === "submit") {
+					confettiTrigger.value += 1;
+					await submitGiftOrder({
+						giftId,
+						isIgnorePointsBalance: options?.isIgnorePointsBalance,
+					});
+				} else {
+					await withdrawGiftOrder({
+						giftId,
+						isIgnorePointsBalance: options?.isIgnorePointsBalance,
+					});
+				}
+			} catch (error: any) {
+				if (error?.message === "not_enough_points") {
+					notify.toast(
+						<div>
+							<h5>Not enough points :'(</h5>
+							<p>
+								We can roll with it though! Assuming you won't feel awkward
+								about receiving that many gifts from me :P
+							</p>
+							<button
+								type="button"
+								onClick={() =>
+									onGiftOrderRequest(giftId, request, {
+										isIgnorePointsBalance: true,
+									})
+								}
+							>
+								Let's roll!
+							</button>
+						</div>,
+						{
+							position: POSITION.BOTTOM_CENTER,
+							type: TYPE.INFO,
+							bodyClassName: "points-limit-toast",
+						},
+					);
+				} else {
+					notify.error(error?.message ?? "error");
+					captureException(error);
+				}
+			}
+			loadingIndicator.finish();
+		}
+
+		return () => (
+			<CVStack gap="3" key={`${gift.id}-${gift.order?.status}`}>
+				<CHeading size="md">{gift.name}</CHeading>
+				<CBox innerHTML={marked.parse(gift.description_short) as string} />
+				<CBox>{gift.points}</CBox>
+				<CBox>{gift.fit_confidence}</CBox>
+				<CImage
+					src={`http://localhost:8000${gift.image_card.url}`}
+					maxH="200px"
+					maxW="fit-content"
+				/>
+
+				<CFlex w="100%" justify="flex-end" pos="relative">
+					<CFlex gap="3">
+						{!isOrderPending.value && (
+							<CButton
+								onClick={() => onGiftOrderRequest(gift.id, "submit")}
+								loading={loadingIndicator.isLoading}
+							>
+								Yup, it's a good one
+							</CButton>
+						)}
+						{isOrderPending.value && (
+							<CButton
+								onClick={() => onGiftOrderRequest(gift.id, "withdraw")}
+								loading={loadingIndicator.isLoading}
+								variant="outline"
+							>
+								Withdraw
+							</CButton>
+						)}
+					</CFlex>
+					{Boolean(confettiTrigger.value) && (
+						<CBox pos="absolute" top="50%" right="40px">
+							{/* @ts-ignore */}
+							<ConfettiExplosion
+								key={confettiTrigger.value}
+								particleSize={8}
+								particleCount={100}
+								force={0.2}
+								stageWidth={400}
+								shouldDestroyAfterDone
+							/>
+						</CBox>
+					)}
+				</CFlex>
+			</CVStack>
+		);
+	},
+});
+
+const GIFT_ORDER_SUBMIT = gql(`
+	mutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
+    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
+      id
+    }
+  }
+`);
+
+const GIFT_ORDER_WITHDRAW = gql(`
+	mutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
+    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
+      id
+    }
+  }
+`);
