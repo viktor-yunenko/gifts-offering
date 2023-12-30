@@ -67,12 +67,12 @@ def gift_order_request(
 
         match order_status:
             case OrderStatus.PENDING:
+                if user.points < 0 and not is_ignore_points_balance:
+                    raise ValidationError("not_enough_points")
                 user.points -= order.gift.points
             case OrderStatus.WITHDRAWN:
                 user.points += order.gift.points
             case _:
                 raise ValueError(f"Unknown order status: {order_status}")
-        if user.points < 0 and not is_ignore_points_balance:
-            raise ValidationError("not_enough_points")
         user.save()
     return cast(GiftOrderType, order)
