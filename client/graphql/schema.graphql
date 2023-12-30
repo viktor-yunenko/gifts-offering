@@ -63,8 +63,8 @@ type GiftType {
 }
 
 type Mutation {
-  gift_order_submit(gift_id: ID!): GiftOrderType!
-  gift_order_withdraw(gift_id: ID!): GiftOrderType!
+  gift_order_submit(gift_id: ID!, is_ignore_points_balance: Boolean! = false): GiftOrderType!
+  gift_order_withdraw(gift_id: ID!, is_ignore_points_balance: Boolean! = false): GiftOrderType!
 }
 
 enum OrderStatus {
@@ -74,10 +74,10 @@ enum OrderStatus {
 }
 
 type Query {
-  gift(pk: ID!): GiftType!
-  gift_image(pk: ID!): GiftImageType!
+  gift: GiftType!
+  gift_image: GiftImageType!
   gift_images: [GiftImageType!]!
-  gift_order(pk: ID!): GiftOrderType!
+  gift_order: GiftOrderType!
   gift_orders: [GiftOrderType!]!
   gifts: [GiftType!]!
   user_current: UserType

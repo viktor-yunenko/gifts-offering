@@ -1,3 +1,4 @@
+// @ts-ignore
 import { POSITION, TYPE, useToast } from "vue-toastification";
 
 const hooks = {
@@ -6,8 +7,10 @@ const hooks = {
 
 export function useNotify() {
 	return {
+		toast: hooks.toast,
 		send: (message: string) => send(message),
 		error: (message: string) => send(message, TYPE.ERROR, 7000),
+		info: (message: string) => send(message, TYPE.INFO, 7000),
 	};
 }
 

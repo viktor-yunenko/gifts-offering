@@ -7,9 +7,8 @@ from strawberry.channels import GraphQLProtocolTypeRouter
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gifts.settings")
 django_asgi_app = get_asgi_application()
 
-
 # must go after `get_asgi_application()`
-from gifts.schema import schema  # noqa: E402
+from gifts.graphql.schema import schema  # noqa: E402
 
 
 application = GraphQLProtocolTypeRouter(

@@ -11,10 +11,12 @@ import { captureException } from "@sentry/vue";
 import { useMutation, useQuery } from "@vue/apollo-composable";
 import { marked } from "marked";
 import { defineComponent } from "vue";
+import { POSITION, TYPE } from "vue-toastification";
 import { USER_QUERY } from "~/composables/useAuth";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { useLoadingIndicator, useNotify } from "#imports";
+import "./points-limit-toast.scss";
 
 export const Homepage = defineComponent({
 	setup() {
@@ -26,28 +28,63 @@ export const Homepage = defineComponent({
 			{ query: GIFTS_QUERY },
 			{ query: USER_QUERY },
 		];
-		const { mutate: submitGiftOrder } = useMutation(GIFT_ORDER_SUBMIT, {
-			refetchQueries,
-		});
-		const { mutate: withdrawGiftOrder } = useMutation(GIFT_ORDER_WITHDRAW, {
-			refetchQueries,
-		});
+		const { mutate: submitGiftOrder, error: submitError } = useMutation(
+			GIFT_ORDER_SUBMIT,
+			{ refetchQueries },
+		);
+		const { mutate: withdrawGiftOrder, error: withdrawError } = useMutation(
+			GIFT_ORDER_WITHDRAW,
+			{ refetchQueries },
+		);
 
 		async function onGiftOrderRequest(
 			giftId: string,
 			request: "submit" | "withdraw",
+			options?: { isIgnorePointsBalance: boolean },
 		) {
 			loadingIndicator.start();
 			try {
 				if (request === "submit") {
-					await submitGiftOrder({ giftId });
+					await submitGiftOrder({
+						giftId,
+						isIgnorePointsBalance: options?.isIgnorePointsBalance,
+					});
 				} else {
-					await withdrawGiftOrder({ giftId });
+					await withdrawGiftOrder({
+						giftId,
+						isIgnorePointsBalance: options?.isIgnorePointsBalance,
+					});
 				}
-			} catch (error) {
-				// @ts-ignore
-				notify.error(error?.message ?? "error");
-				captureException(error);
+			} catch (error: any) {
+				if (error?.message === "not_enough_points") {
+					notify.toast(
+						<div>
+							<h5>Not enough points :'(</h5>
+							<p>
+								We can roll with it though! Assuming you won't feel awkward
+								about receiving this amount of gifts :P
+							</p>
+							<button
+								type="button"
+								onClick={() =>
+									onGiftOrderRequest(giftId, request, {
+										isIgnorePointsBalance: true,
+									})
+								}
+							>
+								Let's roll!
+							</button>
+						</div>,
+						{
+							position: POSITION.BOTTOM_CENTER,
+							type: TYPE.INFO,
+							bodyClassName: "points-limit-toast",
+						},
+					);
+				} else {
+					notify.error(error?.message ?? "error");
+					captureException(error);
+				}
 			}
 			loadingIndicator.finish();
 		}
@@ -92,7 +129,7 @@ export const Homepage = defineComponent({
 											loading={loadingIndicator.isLoading}
 											variant="outline"
 										>
-											Maybe nah
+											Withdraw
 										</CButton>
 									)}
 								</CFlex>
@@ -126,16 +163,16 @@ const GIFTS_QUERY = gql(`
 `);
 
 const GIFT_ORDER_SUBMIT = gql(`
-	mutation GiftOrderSubmit($giftId: ID!) {
-    gift_order_submit(gift_id: $giftId) {
+	mutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
+    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
       id
     }
   }
 `);
 
 const GIFT_ORDER_WITHDRAW = gql(`
-	mutation GiftOrderWithdraw($giftId: ID!) {
-    gift_order_withdraw(gift_id: $giftId) {
+	mutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
+    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
       id
     }
   }

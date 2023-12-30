@@ -9,7 +9,7 @@ from django.urls import include
 from django.urls import path
 from strawberry.django.views import AsyncGraphQLView
 
-from gifts.schema import schema
+from gifts.graphql.schema import schema
 from gifts.settings import DjangoEnv
 
 

@@ -14,8 +14,8 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timage_card {\n\t\t\t\tpath\n\t\t\t\turl\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t}\n\t\t}\n\t}\n": types.GiftsDocument,
-    "\n\tmutation GiftOrderSubmit($giftId: ID!) {\n    gift_order_submit(gift_id: $giftId) {\n      id\n    }\n  }\n": types.GiftOrderSubmitDocument,
-    "\n\tmutation GiftOrderWithdraw($giftId: ID!) {\n    gift_order_withdraw(gift_id: $giftId) {\n      id\n    }\n  }\n": types.GiftOrderWithdrawDocument,
+    "\n\tmutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n": types.GiftOrderSubmitDocument,
+    "\n\tmutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n": types.GiftOrderWithdrawDocument,
     "\n\tquery UserCurrent {\n\t\tuser_current {\n\t\t\tid\n\t\t\tfirst_name\n\t\t\tpoints\n\t\t}\n\t}\n": types.UserCurrentDocument,
 };
 
@@ -40,11 +40,11 @@ export function gql(source: "\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tnam
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n\tmutation GiftOrderSubmit($giftId: ID!) {\n    gift_order_submit(gift_id: $giftId) {\n      id\n    }\n  }\n"): (typeof documents)["\n\tmutation GiftOrderSubmit($giftId: ID!) {\n    gift_order_submit(gift_id: $giftId) {\n      id\n    }\n  }\n"];
+export function gql(source: "\n\tmutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n"): (typeof documents)["\n\tmutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n\tmutation GiftOrderWithdraw($giftId: ID!) {\n    gift_order_withdraw(gift_id: $giftId) {\n      id\n    }\n  }\n"): (typeof documents)["\n\tmutation GiftOrderWithdraw($giftId: ID!) {\n    gift_order_withdraw(gift_id: $giftId) {\n      id\n    }\n  }\n"];
+export function gql(source: "\n\tmutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n"): (typeof documents)["\n\tmutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {\n    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

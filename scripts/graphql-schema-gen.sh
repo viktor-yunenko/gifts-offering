@@ -10,7 +10,7 @@ fi
 
 echo "running django codegen..."
 cd server || exit
-poetry run python manage.py export_schema gifts.schema > ../client/graphql/schema.graphql
+poetry run python manage.py export_schema gifts.graphql.schema > ../client/graphql/schema.graphql
 # print in green
 printf "\033[32m%s\033[0m\n" "created django schema.graphql"
 

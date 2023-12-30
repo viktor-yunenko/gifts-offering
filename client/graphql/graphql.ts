@@ -80,11 +80,13 @@ export type Mutation = {
 
 export type MutationGift_Order_SubmitArgs = {
   gift_id: Scalars['ID']['input'];
+  is_ignore_points_balance?: Scalars['Boolean']['input'];
 };
 
 
 export type MutationGift_Order_WithdrawArgs = {
   gift_id: Scalars['ID']['input'];
+  is_ignore_points_balance?: Scalars['Boolean']['input'];
 };
 
 export enum OrderStatus {
@@ -102,21 +104,6 @@ export type Query = {
   gift_orders: Array<GiftOrderType>;
   gifts: Array<GiftType>;
   user_current?: Maybe<UserType>;
-};
-
-
-export type QueryGiftArgs = {
-  pk: Scalars['ID']['input'];
-};
-
-
-export type QueryGift_ImageArgs = {
-  pk: Scalars['ID']['input'];
-};
-
-
-export type QueryGift_OrderArgs = {
-  pk: Scalars['ID']['input'];
 };
 
 export type UserType = {
@@ -141,6 +128,7 @@ export type GiftsQuery = { __typename?: 'Query', gifts: Array<{ __typename?: 'Gi
 
 export type GiftOrderSubmitMutationVariables = Exact<{
   giftId: Scalars['ID']['input'];
+  isIgnorePointsBalance?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
@@ -148,6 +136,7 @@ export type GiftOrderSubmitMutation = { __typename?: 'Mutation', gift_order_subm
 
 export type GiftOrderWithdrawMutationVariables = Exact<{
   giftId: Scalars['ID']['input'];
+  isIgnorePointsBalance?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
@@ -160,6 +149,6 @@ export type UserCurrentQuery = { __typename?: 'Query', user_current?: { __typena
 
 
 export const GiftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gifts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"image_card"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"path"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description_short"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"fit_confidence"}},{"kind":"Field","name":{"kind":"Name","value":"order"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
-export const GiftOrderSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_submit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderSubmitMutation, GiftOrderSubmitMutationVariables>;
-export const GiftOrderWithdrawDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderWithdraw"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_withdraw"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderWithdrawMutation, GiftOrderWithdrawMutationVariables>;
+export const GiftOrderSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isIgnorePointsBalance"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}},"defaultValue":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_submit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}},{"kind":"Argument","name":{"kind":"Name","value":"is_ignore_points_balance"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isIgnorePointsBalance"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderSubmitMutation, GiftOrderSubmitMutationVariables>;
+export const GiftOrderWithdrawDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GiftOrderWithdraw"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isIgnorePointsBalance"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}},"defaultValue":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gift_order_withdraw"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gift_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftId"}}},{"kind":"Argument","name":{"kind":"Name","value":"is_ignore_points_balance"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isIgnorePointsBalance"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GiftOrderWithdrawMutation, GiftOrderWithdrawMutationVariables>;
 export const UserCurrentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserCurrent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_current"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"points"}}]}}]}}]} as unknown as DocumentNode<UserCurrentQuery, UserCurrentQueryVariables>;

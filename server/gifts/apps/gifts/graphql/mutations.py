@@ -4,6 +4,7 @@ import strawberry
 import strawberry_django
 from asgiref.sync import sync_to_async
 from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from strawberry import ID
 from strawberry.types import Info
@@ -18,18 +19,39 @@ from gifts.apps.gifts.models import OrderStatus
 @strawberry.type
 class GiftsMutation:
     @strawberry_django.mutation()
-    async def gift_order_submit(self, gift_id: ID, info: Info) -> GiftOrderType:
-        return await sync_to_async(gift_order_request)(gift_id, OrderStatus.PENDING, info)
+    async def gift_order_submit(
+        self,
+        info: Info,
+        gift_id: ID,
+        is_ignore_points_balance: bool = False,
+    ) -> GiftOrderType:
+        return await sync_to_async(gift_order_request)(
+            info=info,
+            gift_id=gift_id,
+            is_ignore_points_balance=is_ignore_points_balance,
+            order_status=OrderStatus.PENDING,
+        )
 
     @strawberry_django.mutation()
-    async def gift_order_withdraw(self, gift_id: ID, info: Info) -> GiftOrderType:
-        return await sync_to_async(gift_order_request)(gift_id, OrderStatus.WITHDRAWN, info)
+    async def gift_order_withdraw(
+        self,
+        info: Info,
+        gift_id: ID,
+        is_ignore_points_balance: bool = False,
+    ) -> GiftOrderType:
+        return await sync_to_async(gift_order_request)(
+            info=info,
+            gift_id=gift_id,
+            is_ignore_points_balance=is_ignore_points_balance,
+            order_status=OrderStatus.WITHDRAWN,
+        )
 
 
 def gift_order_request(
-    gift_id: ID,
-    order_status: OrderStatus,
     info: Info,
+    gift_id: ID,
+    is_ignore_points_balance: bool,
+    order_status: OrderStatus,
 ) -> GiftOrderType:
     with transaction.atomic():
         user: User = info.context.request.user
@@ -50,7 +72,7 @@ def gift_order_request(
                 user.points += order.gift.points
             case _:
                 raise ValueError(f"Unknown order status: {order_status}")
-        if user.points < 0:
-            raise PermissionDenied("Not enough points")
+        if user.points < 0 and not is_ignore_points_balance:
+            raise ValidationError("not_enough_points")
         user.save()
     return cast(GiftOrderType, order)
