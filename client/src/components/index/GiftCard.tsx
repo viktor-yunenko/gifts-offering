@@ -2,7 +2,6 @@ import { CButton } from "@chakra-ui/c-button";
 import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
-import "~/components/index/points-limit-toast.scss";
 
 import { injectGlobal } from "@emotion/css";
 import { marked } from "marked";
