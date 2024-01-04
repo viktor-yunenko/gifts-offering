@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-	modules: ["~/modules/apollo", "~/modules/chakra"],
+	modules: ["~/modules/apollo", "~/modules/chakra", "@nuxt/ui"],
 	ssr: false,
 	devtools: { enabled: true },
 	srcDir: "src/",

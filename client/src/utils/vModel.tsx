@@ -7,6 +7,12 @@ export function vModel<T>(ref: Ref<T>) {
 	 */
 	return {
 		modelValue: ref.value,
-		"onUpdate:modelValue": (value: T) => (ref.value = value),
+		[vModelUpdateReceiver]: (value: T) => {
+			console.log("inside vModel", value);
+			ref.value = value;
+		},
 	};
 }
+
+export const vModelUpdateEmit = "update:modelValue";
+export const vModelUpdateReceiver = "onUpdate:modelValue";

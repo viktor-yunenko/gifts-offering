@@ -3,15 +3,14 @@ import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
 
-import { injectGlobal } from "@emotion/css";
 import { marked } from "marked";
 import { defineComponent, ref, watch } from "vue";
 import type { PropType } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
-// @ts-ignore
-import { POSITION, TYPE } from "vue-toastification";
+import { GiftOrderConfirmationModal } from "~/components/index/GiftOrderConfirmationModal";
 import { GIFTS_QUERY } from "~/components/index/Index";
 import { USER_QUERY } from "~/composables/useAuth";
+import { vModel } from "~/utils/vModel";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { GIFT_ORDERS_PENDING, useLoadingIndicator, useNotify } from "#imports";
@@ -30,8 +29,6 @@ export const GiftCard = defineComponent({
 
 		const confettiTrigger = ref(0);
 		const isOrderPending = ref(false);
-
-		const gift = props.gift;
 
 		watch(
 			() => props.gift.order?.status,
@@ -63,11 +60,11 @@ export const GiftCard = defineComponent({
 			loadingIndicator.start();
 			try {
 				if (request === "submit") {
-					confettiTrigger.value += 1;
 					await submitGiftOrder({
 						giftId,
 						isIgnorePointsBalance: options?.isIgnorePointsBalance,
 					});
+					confettiTrigger.value += 1;
 				} else {
 					await withdrawGiftOrder({
 						giftId,
@@ -76,30 +73,7 @@ export const GiftCard = defineComponent({
 				}
 			} catch (error: any) {
 				if (error?.message === "not_enough_points") {
-					notify.toast(
-						<div>
-							<h5>Not enough points :'(</h5>
-							<p>
-								We can roll with it though! Assuming you won't feel awkward
-								about receiving that many gifts from me :P
-							</p>
-							<button
-								type="button"
-								onClick={() =>
-									onGiftOrderRequest(giftId, request, {
-										isIgnorePointsBalance: true,
-									})
-								}
-							>
-								Let's roll!
-							</button>
-						</div>,
-						{
-							position: POSITION.BOTTOM_CENTER,
-							type: TYPE.INFO,
-							bodyClassName: "points-limit-toast",
-						},
-					);
+					isConfirmationModalOpen.value = true;
 				} else {
 					notify.error(error?.message ?? "error");
 					captureException(error);
@@ -108,44 +82,40 @@ export const GiftCard = defineComponent({
 			loadingIndicator.finish();
 		}
 
-		injectGlobal`
-			.points-limit-toast h5 {
-				font-size: 1.5rem !important;
-			}
-
-			.points-limit-toast p {
-				padding: 1rem 0;
-			}
-
-			.points-limit-toast button {
-				border-radius: 0.5rem;
-				border: 1px solid #000;
-				background-color: #fff;
-				color: #000;
-				padding: 0.5rem 1rem;
-			}
-		`;
+		const isConfirmationModalOpen = ref(false);
 
 		return () => (
 			<CVStack gap="3" w="100%">
-				<CHeading size="md">{gift.name}</CHeading>
+				<GiftOrderConfirmationModal
+					giftId={props.gift.id}
+					onConfirmed={async (giftId) =>
+						await onGiftOrderRequest(giftId, "submit", {
+							isIgnorePointsBalance: true,
+						})
+					}
+					{...vModel(isConfirmationModalOpen)}
+				/>
+
+				<CHeading size="md">{props.gift.name}</CHeading>
 				<CImage
-					src={`http://localhost:8000${gift.image_card.url}`}
+					src={`http://localhost:8000${props.gift.image_card.url}`}
 					maxH="200px"
 					maxW="fit-content"
 				/>
-				<CBox innerHTML={marked.parse(gift.description_short) as string} />
+				<CBox
+					innerHTML={marked.parse(props.gift.description_short) as string}
+				/>
 
 				<CFlex justify="space-between">
-					<CBox>{gift.points}</CBox>
-					<CBox>{gift.fit_confidence}</CBox>
+					<CBox>{props.gift.points}</CBox>
+					<CBox>{props.gift.fit_confidence}</CBox>
 				</CFlex>
 
 				<CFlex w="100%" justify="flex-end" pos="relative">
 					<CFlex gap="3">
 						{!isOrderPending.value && (
 							<CButton
-								onClick={() => onGiftOrderRequest(gift.id, "submit")}
+								onClick={() => onGiftOrderRequest(props.gift.id, "submit")}
 								loading={loadingIndicator.isLoading}
 								variant="solid"
 							>
@@ -154,7 +124,7 @@ export const GiftCard = defineComponent({
 						)}
 						{isOrderPending.value && (
 							<CButton
-								onClick={() => onGiftOrderRequest(gift.id, "withdraw")}
+								onClick={() => onGiftOrderRequest(props.gift.id, "withdraw")}
 								loading={loadingIndicator.isLoading}
 								variant="outline"
 								colorScheme="gray"
