@@ -137,6 +137,7 @@ export const GiftCard = defineComponent({
 								onClick={() => onGiftOrderRequest(gift.id, "withdraw")}
 								loading={loadingIndicator.isLoading}
 								variant="outline"
+								colorScheme="gray"
 							>
 								Cancel
 							</CButton>

@@ -1,4 +1,4 @@
-import { CBox, CFlex } from "@chakra-ui/vue-next";
+import { CFlex } from "@chakra-ui/vue-next";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent } from "vue";
 import { GiftCard } from "~/components/GiftCard";

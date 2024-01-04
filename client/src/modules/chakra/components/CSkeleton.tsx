@@ -1,7 +1,7 @@
-import { defineComponent } from "vue";
 import { CBox } from "@chakra-ui/vue-next";
 import { vueThemingProps } from "@chakra-ui/vue-utils";
 import { css } from "@emotion/css";
+import { defineComponent } from "vue";
 
 export const CSkeleton = defineComponent({
 	name: "YourComponent",
