@@ -1,7 +1,7 @@
-import { CFlex, CTag } from "@chakra-ui/vue-next";
+import { CFlex, CIcon, CTag, CText } from "@chakra-ui/vue-next";
 import { keyframes } from "@emotion/css";
 import type { ComponentPublicInstance } from "@vue/runtime-core";
-import { computed, defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useAuth } from "~/composables/useAuth";
 import { useOrders } from "~/composables/useOrders";
 import { CSkeleton } from "~/modules/chakra/components/CSkeleton";
@@ -32,10 +32,8 @@ export const NavBar = defineComponent({
 			emit("bodyPaddingChanged", userBarPadding);
 		});
 
-		const isOrdersPlural = computed(() => orders.ordersPendingCount() > 1);
-
 		auth.onResult(() => {
-			authLoadCounter.value++;
+			authLoadCounter.value += 1;
 
 			if (authLoadCounter.value > 2) {
 				isAnimatePointsOnChange.value = true;
@@ -59,10 +57,10 @@ export const NavBar = defineComponent({
 				<CFlex gap="1.5">
 					{auth.loading && (
 						<CTag
-							key={authLoadCounter.value}
+							key={auth?.user()?.points}
 							animation={
 								isAnimatePointsOnChange.value
-									? `${keyframes`from, to { opacity: 1 } 50% { opacity: 0 }`} 0.4s linear 2`
+									? `${keyframes`from, to { opacity: 1 } 50% { opacity: 0 }`} 0.4s linear 1`
 									: 0
 							}
 						>
@@ -74,9 +72,9 @@ export const NavBar = defineComponent({
 				</CFlex>
 
 				{orders.ordersPendingCount() ? (
-					<CFlex color="gray.500">
-						{orders.ordersPendingCount()} pending{" "}
-						{isOrdersPlural.value ? "gifts" : "gift"}
+					<CFlex color="gray.500" align="center" gap="2">
+						<CText>{orders.ordersPendingCount()}</CText>
+						<CIcon name="bi-gift" />
 					</CFlex>
 				) : (
 					<CFlex>Welcome ^^</CFlex>

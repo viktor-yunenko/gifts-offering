@@ -7,7 +7,7 @@ export default defineComponent({
 	setup(props, { slots }) {
 		const bodyPaddingBottom = ref("0px");
 		const style = {
-			p: 12,
+			p: 6,
 		};
 
 		return () => (

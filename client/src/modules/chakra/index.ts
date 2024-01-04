@@ -1,11 +1,17 @@
 import type { ThemeOverride } from "@chakra-ui/theme-utils";
 import { extendTheme } from "@chakra-ui/vue-next";
+import type { IconifyIcon } from "@iconify/types";
 import { defineNuxtModule, installModule } from "@nuxt/kit";
 import type { ModuleOptions } from "@nuxt/schema";
 
 export default defineNuxtModule<ModuleOptions>({
 	async setup(options, nuxt) {
 		await installModule("@chakra-ui/nuxt-next", {
+			icons: {
+				extend: {
+					...getIconifyProps("bi-gift", await import("@iconify-icons/bi/gift")),
+				},
+			},
 			extendTheme: extendTheme({
 				config: {
 					cssVarPrefix: "chakra",
@@ -17,6 +23,7 @@ export default defineNuxtModule<ModuleOptions>({
 						},
 					},
 				},
+
 				colors: {
 					gray: {
 						50: "#f8fafc",
@@ -62,3 +69,12 @@ export default defineNuxtModule<ModuleOptions>({
 		});
 	},
 });
+
+function getIconifyProps(name: string, icon: IconifyIcon) {
+	return {
+		[name]: {
+			path: icon.body,
+			viewBox: `${icon.left} ${icon.top} ${icon.width} ${icon.height}`,
+		},
+	};
+}

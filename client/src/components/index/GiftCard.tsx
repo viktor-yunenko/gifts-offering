@@ -7,8 +7,8 @@ import { marked } from "marked";
 import { defineComponent, ref, watch } from "vue";
 import type { PropType } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
-import { GiftOrderConfirmationModal } from "~/components/index/GiftOrderConfirmationModal";
 import { GIFTS_QUERY } from "~/components/index/Index";
+import { PointsIgnoreModal } from "~/components/index/PointsIgnoreModal";
 import { USER_QUERY } from "~/composables/useAuth";
 import { vModel } from "~/utils/vModel";
 import { gql } from "#graphql";
@@ -29,6 +29,7 @@ export const GiftCard = defineComponent({
 
 		const confettiTrigger = ref(0);
 		const isOrderPending = ref(false);
+		const isPointsIgnoreModalOpen = ref(false);
 
 		watch(
 			() => props.gift.order?.status,
@@ -73,7 +74,7 @@ export const GiftCard = defineComponent({
 				}
 			} catch (error: any) {
 				if (error?.message === "not_enough_points") {
-					isConfirmationModalOpen.value = true;
+					isPointsIgnoreModalOpen.value = true;
 				} else {
 					notify.error(error?.message ?? "error");
 					captureException(error);
@@ -82,18 +83,16 @@ export const GiftCard = defineComponent({
 			loadingIndicator.finish();
 		}
 
-		const isConfirmationModalOpen = ref(false);
-
 		return () => (
 			<CVStack gap="3" w="100%">
-				<GiftOrderConfirmationModal
+				<PointsIgnoreModal
 					giftId={props.gift.id}
 					onConfirmed={async (giftId) =>
 						await onGiftOrderRequest(giftId, "submit", {
 							isIgnorePointsBalance: true,
 						})
 					}
-					{...vModel(isConfirmationModalOpen)}
+					{...vModel(isPointsIgnoreModalOpen)}
 				/>
 
 				<CHeading size="md">{props.gift.name}</CHeading>
