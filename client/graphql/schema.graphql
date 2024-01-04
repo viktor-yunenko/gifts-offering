@@ -38,6 +38,13 @@ type GiftImageType {
   updated_at: DateTime!
 }
 
+input GiftOrderFilter {
+  AND: GiftOrderFilter
+  NOT: GiftOrderFilter
+  OR: GiftOrderFilter
+  status: OrderStatus
+}
+
 type GiftOrderType {
   created_at: DateTime!
   gift: GiftType!
@@ -78,7 +85,7 @@ type Query {
   gift_image: GiftImageType!
   gift_images: [GiftImageType!]!
   gift_order: GiftOrderType!
-  gift_orders: [GiftOrderType!]!
+  gift_orders(filters: GiftOrderFilter): [GiftOrderType!]!
   gifts: [GiftType!]!
   user_current: UserType
 }

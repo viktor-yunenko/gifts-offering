@@ -8,6 +8,7 @@ from gifts.apps.auth.graphql.types import UserType
 from gifts.apps.gifts.models import Gift
 from gifts.apps.gifts.models import GiftImage
 from gifts.apps.gifts.models import GiftOrder
+from gifts.apps.gifts.models import OrderStatus
 
 
 @strawberry_django.type(Gift, fields="__all__")
@@ -19,13 +20,23 @@ class GiftType:
         return queryset.filter(user=info.context.request.user)
 
 
-@strawberry_django.type(GiftOrder, fields="__all__")
+@strawberry_django.filter(GiftOrder)
+class GiftOrderFilter:
+    status: OrderStatus | None
+
+
+@strawberry_django.type(GiftOrder, fields="__all__", filters=GiftOrderFilter)
 class GiftOrderType:
     gift: GiftType
     user: UserType
 
     @classmethod
-    def get_queryset(cls, queryset: QuerySet[GiftOrder], info: Info) -> QuerySet[GiftOrder]:
+    def get_queryset(
+        cls,
+        queryset: QuerySet[GiftOrder],
+        info: Info,
+        filters: GiftOrderFilter,
+    ) -> QuerySet[GiftOrder]:
         return queryset.filter(user=info.context.request.user)
 
 

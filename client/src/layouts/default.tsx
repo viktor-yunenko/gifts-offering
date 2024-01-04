@@ -3,12 +3,14 @@ import { keyframes } from "@emotion/css";
 import type { ComponentPublicInstance } from "@vue/runtime-core";
 import { computed, defineComponent, ref } from "vue";
 import { useAuth } from "~/composables/useAuth";
+import { useOrders } from "~/composables/useOrders";
 import { CSkeleton } from "~/modules/chakra/components/CSkeleton";
 import { NuxtLoadingIndicator } from "#components";
 
 export default defineComponent({
 	setup(props, { slots }) {
 		const auth = useAuth();
+		const orders = useOrders();
 
 		const isAnimatePointsOnChange = ref(false);
 		const authLoadCounter = ref(0);
@@ -20,6 +22,8 @@ export default defineComponent({
 				? `${userBarRef.value?.$el.clientHeight + additionalSpace}px`
 				: "0px";
 		});
+
+		const isOrdersPlural = computed(() => orders.ordersPendingCount() > 1);
 
 		auth.onResult(() => {
 			authLoadCounter.value++;
@@ -53,13 +57,12 @@ export default defineComponent({
 					w="100%"
 					justify="space-between"
 					border="1px solid"
-					borderColor="gray.100"
+					borderColor="gray.200"
+					boxShadow={"base"}
 					px={style.p}
-					py="6"
+					py="4"
 					bg="white"
 				>
-					<CFlex>Welcome, {auth?.user()?.first_name}!</CFlex>
-
 					<CFlex gap="1.5">
 						{auth.loading && (
 							<CTag
@@ -76,6 +79,15 @@ export default defineComponent({
 						{!auth.loading && <CSkeleton w="11" h="100%" />}
 						<CFlex>points</CFlex>
 					</CFlex>
+
+					{orders.ordersPendingCount() ? (
+						<CFlex color="gray.500">
+							{orders.ordersPendingCount()} pending{" "}
+							{isOrdersPlural.value ? "gifts" : "gift"}
+						</CFlex>
+					) : (
+						<CFlex>Welcome ^^</CFlex>
+					)}
 				</CFlex>
 			</CFlex>
 		);

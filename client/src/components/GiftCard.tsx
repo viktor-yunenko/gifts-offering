@@ -12,7 +12,7 @@ import { GIFTS_QUERY } from "~/components/Homepage";
 import { USER_QUERY } from "~/composables/useAuth";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
-import { useLoadingIndicator, useNotify } from "#imports";
+import { GIFT_ORDERS_PENDING, useLoadingIndicator, useNotify } from "#imports";
 import "./points-limit-toast.scss";
 
 export const GiftCard = defineComponent({
@@ -43,6 +43,7 @@ export const GiftCard = defineComponent({
 		const refetchQueries = () => [
 			{ query: GIFTS_QUERY },
 			{ query: USER_QUERY },
+			{ query: GIFT_ORDERS_PENDING },
 		];
 		const { mutate: submitGiftOrder, error: submitError } = useMutation(
 			GIFT_ORDER_SUBMIT,
