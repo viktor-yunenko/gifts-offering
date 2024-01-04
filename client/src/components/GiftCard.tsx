@@ -107,16 +107,19 @@ export const GiftCard = defineComponent({
 		}
 
 		return () => (
-			<CVStack gap="3" key={`${gift.id}-${gift.order?.status}`}>
+			<CVStack gap="3" w="100%">
 				<CHeading size="md">{gift.name}</CHeading>
-				<CBox innerHTML={marked.parse(gift.description_short) as string} />
-				<CBox>{gift.points}</CBox>
-				<CBox>{gift.fit_confidence}</CBox>
 				<CImage
 					src={`http://localhost:8000${gift.image_card.url}`}
 					maxH="200px"
 					maxW="fit-content"
 				/>
+				<CBox innerHTML={marked.parse(gift.description_short) as string} />
+
+				<CFlex justify="space-between">
+					<CBox>{gift.points}</CBox>
+					<CBox>{gift.fit_confidence}</CBox>
+				</CFlex>
 
 				<CFlex w="100%" justify="flex-end" pos="relative">
 					<CFlex gap="3">
@@ -124,8 +127,9 @@ export const GiftCard = defineComponent({
 							<CButton
 								onClick={() => onGiftOrderRequest(gift.id, "submit")}
 								loading={loadingIndicator.isLoading}
+								variant="solid"
 							>
-								Yup, it's a good one
+								Yes please
 							</CButton>
 						)}
 						{isOrderPending.value && (
@@ -134,7 +138,7 @@ export const GiftCard = defineComponent({
 								loading={loadingIndicator.isLoading}
 								variant="outline"
 							>
-								Withdraw
+								Cancel
 							</CButton>
 						)}
 					</CFlex>

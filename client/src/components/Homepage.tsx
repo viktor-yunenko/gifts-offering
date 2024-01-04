@@ -9,13 +9,11 @@ export const Homepage = defineComponent({
 	setup() {
 		const { result: giftsResult } = useQuery(GIFTS_QUERY);
 		return () => (
-			<CBox>
-				<CFlex gap="10">
-					{giftsResult.value?.gifts.map((gift) => (
-						<GiftCard gift={gift} key={gift.id} />
-					))}
-				</CFlex>
-			</CBox>
+			<CFlex gap="10" direction="column">
+				{giftsResult.value?.gifts.map((gift) => (
+					<GiftCard gift={gift} key={gift.id} />
+				))}
+			</CFlex>
 		);
 	},
 });
