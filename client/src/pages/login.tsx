@@ -1,7 +1,7 @@
-import { LoginForm } from "~/components/LoginForm";
+import { Login } from "~/components/login/Login";
 
 export default {
 	setup() {
-		return () => <LoginForm />;
+		return () => <Login />;
 	},
 };

@@ -2,18 +2,20 @@ import { CButton } from "@chakra-ui/c-button";
 import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
+import "~/components/index/points-limit-toast.scss";
+
+import { injectGlobal } from "@emotion/css";
 import { marked } from "marked";
 import { defineComponent, ref, watch } from "vue";
 import type { PropType } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
 // @ts-ignore
 import { POSITION, TYPE } from "vue-toastification";
-import { GIFTS_QUERY } from "~/components/Homepage";
+import { GIFTS_QUERY } from "~/components/index/Index";
 import { USER_QUERY } from "~/composables/useAuth";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { GIFT_ORDERS_PENDING, useLoadingIndicator, useNotify } from "#imports";
-import "./points-limit-toast.scss";
 
 export const GiftCard = defineComponent({
 	props: {
@@ -106,6 +108,24 @@ export const GiftCard = defineComponent({
 			}
 			loadingIndicator.finish();
 		}
+
+		injectGlobal`
+			.points-limit-toast h5 {
+				font-size: 1.5rem !important;
+			}
+
+			.points-limit-toast p {
+				padding: 1rem 0;
+			}
+
+			.points-limit-toast button {
+				border-radius: 0.5rem;
+				border: 1px solid #000;
+				background-color: #fff;
+				color: #000;
+				padding: 0.5rem 1rem;
+			}
+		`;
 
 		return () => (
 			<CVStack gap="3" w="100%">

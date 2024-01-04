@@ -1,8 +1,8 @@
 import { defineComponent } from "vue";
-import { Homepage } from "~/components/Homepage";
+import { Index } from "~/components/index/Index";
 
 export default defineComponent({
 	setup() {
-		return () => <Homepage />;
+		return () => <Index />;
 	},
 });

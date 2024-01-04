@@ -5,7 +5,7 @@ import { defineComponent, ref } from "vue";
 import { vModel } from "~/utils/vModel";
 import { useLoadingIndicator } from "#imports";
 
-export const LoginForm = defineComponent({
+export const Login = defineComponent({
 	setup() {
 		const loading = useLoadingIndicator();
 

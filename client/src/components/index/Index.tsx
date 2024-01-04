@@ -1,11 +1,10 @@
 import { CFlex } from "@chakra-ui/vue-next";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent } from "vue";
-import { GiftCard } from "~/components/GiftCard";
+import { GiftCard } from "~/components/index/GiftCard";
 import { gql } from "#graphql";
-import "./points-limit-toast.scss";
 
-export const Homepage = defineComponent({
+export const Index = defineComponent({
 	setup() {
 		const { result: giftsResult } = useQuery(GIFTS_QUERY);
 		return () => (
