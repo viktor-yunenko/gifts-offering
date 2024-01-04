@@ -67,7 +67,7 @@ def gift_order_request(
 
         match order_status:
             case OrderStatus.PENDING:
-                if user.points < 0 and not is_ignore_points_balance:
+                if not is_ignore_points_balance and user.points < order.gift.points:
                     raise ValidationError("not_enough_points")
                 user.points -= order.gift.points
             case OrderStatus.WITHDRAWN:
