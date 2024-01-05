@@ -25,9 +25,8 @@ export const NavBar = defineComponent({
 
 		const userBarRef = ref<ComponentPublicInstance>();
 		watch(userBarRef, () => {
-			const additionalSpace = 16;
 			const userBarPadding = userBarRef.value
-				? `${userBarRef.value?.$el.clientHeight + additionalSpace}px`
+				? `${userBarRef.value?.$el.clientHeight}px`
 				: "0px";
 			emit("bodyPaddingChanged", userBarPadding);
 		});
@@ -44,15 +43,14 @@ export const NavBar = defineComponent({
 			<CFlex
 				ref={userBarRef as any}
 				pos="fixed"
-				bottom="0"
+				top="0"
 				w="100%"
 				justify="space-between"
-				borderTop="1px solid"
 				borderColor="gray.200"
-				boxShadow={"base"}
 				px={props.px}
 				py="4"
 				bg="white"
+				boxShadow="lg"
 			>
 				<CFlex gap="1.5">
 					{auth.loading && (
@@ -74,12 +72,17 @@ export const NavBar = defineComponent({
 				</CFlex>
 
 				{orders.ordersPendingCount() ? (
-					<CFlex color="gray.500" align="center" gap="2">
-						<CText>{orders.ordersPendingCount()}</CText>
-						<CIcon name="bi-gift" />
+					<CFlex
+						key={orders.ordersPendingCount()}
+						color="gray.500"
+						align="center"
+						gap="2"
+					>
+						<CIcon name="bi-gift" color="cyan.600" />
+						<CTag colorScheme="cyan">{orders.ordersPendingCount()}</CTag>
 					</CFlex>
 				) : (
-					<CFlex>Welcome ^^</CFlex>
+					<CFlex color="gray.500">Don't be shy :)</CFlex>
 				)}
 			</CFlex>
 		);

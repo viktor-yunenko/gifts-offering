@@ -4,23 +4,16 @@ import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
-import { GIFT_ORDERS_PENDING, useLoadingIndicator, useNotify } from "#imports";
+import { useLoadingIndicator, useNotify } from "#imports";
 
 import { marked } from "marked";
 import type { PropType } from "vue";
 import { defineComponent, ref, watch } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
+import { appQueries } from "~/appQueries";
 import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
 import { OrderAmountInput } from "~/components/index/GiftCard/OrderAmountInput";
-import { GIFTS_QUERY } from "~/components/index/Index";
-import { USER_QUERY } from "~/composables/useAuth";
 import { vModel } from "~/utils/vModel";
-
-export const appStatusQueries = () => [
-	{ query: GIFTS_QUERY },
-	{ query: USER_QUERY },
-	{ query: GIFT_ORDERS_PENDING },
-];
 
 export const GiftCard = defineComponent({
 	props: {
@@ -52,7 +45,7 @@ export const GiftCard = defineComponent({
 
 		const { mutate: orderSubmitOrWithdraw } = useMutation(
 			GIFT_ORDER_SUBMIT_OR_WITHDRAW,
-			{ refetchQueries: appStatusQueries },
+			{ refetchQueries: appQueries },
 		);
 
 		async function onOrderSubmitOrWithdraw(
@@ -83,7 +76,14 @@ export const GiftCard = defineComponent({
 		}
 
 		return () => (
-			<CVStack gap="3" w="100%">
+			<CVStack
+				gap="3"
+				w="100%"
+				bg="white"
+				p="6"
+				borderRadius="md"
+				boxShadow="md"
+			>
 				<ConfirmPointsIgnoreModal
 					{...vModel(confirmModalProps.isOpen)}
 					onConfirmed={async () => {

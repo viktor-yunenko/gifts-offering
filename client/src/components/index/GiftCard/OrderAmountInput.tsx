@@ -8,8 +8,8 @@ import { useLoadingIndicator, useNotify } from "#imports";
 
 import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
+import { appQueries } from "~/appQueries";
 import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
-import { appStatusQueries } from "~/components/index/GiftCard/GiftCard";
 import { vModel } from "~/utils/vModel";
 
 type Order = NonNullable<GiftsQuery["gifts"][number]["order"]>;
@@ -31,7 +31,7 @@ export const OrderAmountInput = defineComponent({
 
 		const { mutate: orderUpdateAmount } = useMutation(
 			GIFT_ORDER_UPDATE_AMOUNT,
-			{ refetchQueries: appStatusQueries },
+			{ refetchQueries: appQueries },
 		);
 
 		async function onOrderUpdateAmount(options?: {

@@ -5,18 +5,19 @@ import { NuxtLoadingIndicator } from "#components";
 
 export default defineComponent({
 	setup(props, { slots }) {
-		const bodyPaddingBottom = ref("0px");
+		const bodyPaddingTop = ref("0px");
 		const style = {
-			p: 6,
+			p: 5,
 		};
 
 		return () => (
-			// hide overflow to keep viewport during <ConfettiExplosion />
 			<CFlex
 				direction="column"
+				// hide overflow to keep viewport stable during <ConfettiExplosion />
 				overflow="hidden"
 				pos="relative"
-				pb={bodyPaddingBottom.value}
+				pt={bodyPaddingTop.value}
+				bg="gray.100"
 			>
 				<CFlex direction="column" h="100%" w="100%" p={style.p}>
 					<NuxtLoadingIndicator />
@@ -26,7 +27,7 @@ export default defineComponent({
 				<NavBar
 					px={style.p}
 					onBodyPaddingChanged={(value) => {
-						bodyPaddingBottom.value = value;
+						bodyPaddingTop.value = value;
 					}}
 				/>
 			</CFlex>
