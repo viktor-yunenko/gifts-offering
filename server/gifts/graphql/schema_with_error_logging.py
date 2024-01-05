@@ -24,8 +24,12 @@ class SchemaWithErrorLogging(strawberry.Schema):
         for error in errors:
             if error_original := getattr(error, "original_error"):
                 if isinstance(error_original, ValidationError):
-                    logger.warning(f"ValidationError: {error_original.message}")
-                    if "User is not logged in" in error_original.message:
+                    if hasattr(error_original, "message"):
+                        message = error_original.message
+                    else:
+                        message = ", ".join(error_original.messages)
+                    logger.warning(f"ValidationError: {message}")
+                    if "User is not logged in" in message:
                         execution_context.context.response.status_code = 401
                 else:
                     logger.exception(error_original)
