@@ -45,7 +45,18 @@ input GiftOrderFilter {
   status: OrderStatus
 }
 
+input GiftOrderInput {
+  amount: Int
+  created_at: DateTime
+  gift: OneToOneInput
+  id: ID
+  status: OrderStatus
+  updated_at: DateTime
+  user: OneToManyInput!
+}
+
 type GiftOrderType {
+  amount: Int!
   created_at: DateTime!
   gift: GiftType!
   id: ID!
@@ -64,19 +75,29 @@ type GiftType {
   is_published: Boolean!
   name: String!
   order: GiftOrderType
+  order_amount_default: Int!
   points: Decimal!
   updated_at: DateTime!
   user: DjangoModelType!
 }
 
 type Mutation {
-  gift_order_submit(gift_id: ID!, is_ignore_points_balance: Boolean! = false): GiftOrderType!
-  gift_order_withdraw(gift_id: ID!, is_ignore_points_balance: Boolean! = false): GiftOrderType!
+  gift_order_submit_or_withdraw(gift_id: ID!, is_ignore_points_balance: Boolean! = false, status: OrderStatus!): GiftOrderType!
+  gift_order_update(data: GiftOrderInput!): GiftOrderType!
+  gift_order_update_amount(amount: Int!, is_ignore_points_balance: Boolean! = false, order_id: ID!): GiftOrderType!
+}
+
+input OneToManyInput {
+  set: ID
+}
+
+input OneToOneInput {
+  set: ID
 }
 
 enum OrderStatus {
   CONFIRMED
-  PENDING
+  SUBMITTED
   WITHDRAWN
 }
 

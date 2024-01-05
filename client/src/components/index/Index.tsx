@@ -32,6 +32,7 @@ export const GIFTS_QUERY = gql(`
 			order {
 				id
 				status
+				amount
 			}
 		}
 	}

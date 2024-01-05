@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 
@@ -38,6 +40,8 @@ class GiftOrderAdmin(SimpleHistoryAdmin):
         "gift",
         "user",
         "status",
+        "amount",
+        "get_points",
         "created_at",
         "updated_at",
     ]
@@ -47,3 +51,7 @@ class GiftOrderAdmin(SimpleHistoryAdmin):
         "user__email",
         "user__first_name",
     ]
+
+    @admin.display(description="Points")
+    def get_points(self, obj: GiftOrder) -> Decimal:
+        return obj.gift.points * obj.amount

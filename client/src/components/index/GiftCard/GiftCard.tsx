@@ -2,18 +2,25 @@ import { CButton } from "@chakra-ui/c-button";
 import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
-
-import { marked } from "marked";
-import { defineComponent, ref, watch } from "vue";
-import type { PropType } from "vue";
-import ConfettiExplosion from "vue-confetti-explosion";
-import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
-import { GIFTS_QUERY } from "~/components/index/Index";
-import { USER_QUERY } from "~/composables/useAuth";
-import { vModel } from "~/utils/vModel";
 import { gql } from "#graphql";
 import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { GIFT_ORDERS_PENDING, useLoadingIndicator, useNotify } from "#imports";
+
+import { marked } from "marked";
+import type { PropType } from "vue";
+import { defineComponent, ref, watch } from "vue";
+import ConfettiExplosion from "vue-confetti-explosion";
+import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
+import { OrderAmountInput } from "~/components/index/GiftCard/OrderAmountInput";
+import { GIFTS_QUERY } from "~/components/index/Index";
+import { USER_QUERY } from "~/composables/useAuth";
+import { vModel } from "~/utils/vModel";
+
+export const appStatusQueries = () => [
+	{ query: GIFTS_QUERY },
+	{ query: USER_QUERY },
+	{ query: GIFT_ORDERS_PENDING },
+];
 
 export const GiftCard = defineComponent({
 	props: {
@@ -29,55 +36,47 @@ export const GiftCard = defineComponent({
 
 		const confettiTrigger = ref(0);
 		const isOrderPending = ref(false);
-		const isPointsIgnoreModalOpen = ref(false);
+
+		const confirmModalProps = {
+			isOpen: ref(false),
+			amountChangeRequested: ref<number | null>(null),
+		};
 
 		watch(
 			() => props.gift.order?.status,
 			(status) => {
-				isOrderPending.value = status === OrderStatus.Pending;
+				isOrderPending.value = status === OrderStatus.Submitted;
 			},
 			{ immediate: true },
 		);
 
-		const refetchQueries = () => [
-			{ query: GIFTS_QUERY },
-			{ query: USER_QUERY },
-			{ query: GIFT_ORDERS_PENDING },
-		];
-		const { mutate: submitGiftOrder, error: submitError } = useMutation(
-			GIFT_ORDER_SUBMIT,
-			{ refetchQueries },
-		);
-		const { mutate: withdrawGiftOrder, error: withdrawError } = useMutation(
-			GIFT_ORDER_WITHDRAW,
-			{ refetchQueries },
+		const { mutate: orderSubmitOrWithdraw } = useMutation(
+			GIFT_ORDER_SUBMIT_OR_WITHDRAW,
+			{ refetchQueries: appStatusQueries },
 		);
 
-		async function onGiftOrderRequest(
-			giftId: string,
-			request: "submit" | "withdraw",
+		async function onOrderSubmitOrWithdraw(
+			status: OrderStatus,
 			options?: { isIgnorePointsBalance: boolean },
 		) {
 			loadingIndicator.start();
 			try {
-				if (request === "submit") {
-					await submitGiftOrder({
-						giftId,
-						isIgnorePointsBalance: options?.isIgnorePointsBalance,
-					});
+				await orderSubmitOrWithdraw({
+					giftId: props.gift.id,
+					status,
+					isIgnorePointsBalance: options?.isIgnorePointsBalance,
+				});
+
+				if (status === OrderStatus.Submitted) {
 					confettiTrigger.value += 1;
-				} else {
-					await withdrawGiftOrder({
-						giftId,
-						isIgnorePointsBalance: options?.isIgnorePointsBalance,
-					});
 				}
 			} catch (error: any) {
 				if (error?.message === "not_enough_points") {
-					isPointsIgnoreModalOpen.value = true;
+					confirmModalProps.isOpen.value = true;
 				} else {
 					notify.error(error?.message ?? "error");
 					captureException(error);
+					console.error(error);
 				}
 			}
 			loadingIndicator.finish();
@@ -86,16 +85,20 @@ export const GiftCard = defineComponent({
 		return () => (
 			<CVStack gap="3" w="100%">
 				<ConfirmPointsIgnoreModal
-					giftId={props.gift.id}
-					onConfirmed={async (giftId) =>
-						await onGiftOrderRequest(giftId, "submit", {
+					{...vModel(confirmModalProps.isOpen)}
+					onConfirmed={async () => {
+						await onOrderSubmitOrWithdraw(OrderStatus.Submitted, {
 							isIgnorePointsBalance: true,
-						})
-					}
-					{...vModel(isPointsIgnoreModalOpen)}
+						});
+					}}
 				/>
 
-				<CHeading size="md">{props.gift.name}</CHeading>
+				<CHeading
+					size="md"
+					color={isOrderPending.value ? "cyan.600" : "fuchsia.600"}
+				>
+					{props.gift.name}
+				</CHeading>
 				<CImage
 					src={`http://localhost:8000${props.gift.image_card.url}`}
 					maxH="200px"
@@ -114,7 +117,7 @@ export const GiftCard = defineComponent({
 					<CFlex gap="3">
 						{!isOrderPending.value && (
 							<CButton
-								onClick={() => onGiftOrderRequest(props.gift.id, "submit")}
+								onClick={() => onOrderSubmitOrWithdraw(OrderStatus.Submitted)}
 								loading={loadingIndicator.isLoading}
 								variant="solid"
 							>
@@ -122,14 +125,18 @@ export const GiftCard = defineComponent({
 							</CButton>
 						)}
 						{isOrderPending.value && (
-							<CButton
-								onClick={() => onGiftOrderRequest(props.gift.id, "withdraw")}
-								loading={loadingIndicator.isLoading}
-								variant="outline"
-								colorScheme="gray"
-							>
-								Cancel
-							</CButton>
+							<CFlex gap="4">
+								<CButton
+									onClick={() => onOrderSubmitOrWithdraw(OrderStatus.Withdrawn)}
+									loading={loadingIndicator.isLoading}
+									variant="outline"
+									colorScheme="gray"
+									fontWeight="normal"
+								>
+									Cancel
+								</CButton>
+								<OrderAmountInput order={props.gift.order!} />
+							</CFlex>
 						)}
 					</CFlex>
 					{Boolean(confettiTrigger.value) && (
@@ -141,7 +148,7 @@ export const GiftCard = defineComponent({
 								particleCount={100}
 								force={0.2}
 								stageWidth={400}
-								shouldDestroyAfterDone
+								stageHeight={1600}
 							/>
 						</CBox>
 					)}
@@ -151,18 +158,18 @@ export const GiftCard = defineComponent({
 	},
 });
 
-const GIFT_ORDER_SUBMIT = gql(`
-	mutation GiftOrderSubmit($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
-    gift_order_submit(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
-      id
-    }
-  }
-`);
-
-const GIFT_ORDER_WITHDRAW = gql(`
-	mutation GiftOrderWithdraw($giftId: ID!, $isIgnorePointsBalance: Boolean = false) {
-    gift_order_withdraw(gift_id: $giftId, is_ignore_points_balance: $isIgnorePointsBalance) {
-      id
-    }
-  }
+const GIFT_ORDER_SUBMIT_OR_WITHDRAW = gql(`
+	mutation GiftOrderSubmitOrWithdraw(
+		$giftId: ID!
+		$status: OrderStatus!
+		$isIgnorePointsBalance: Boolean = false
+	) {
+		gift_order_submit_or_withdraw(
+			gift_id: $giftId
+			status: $status
+			is_ignore_points_balance: $isIgnorePointsBalance
+		) {
+			id
+		}
+	}
 `);

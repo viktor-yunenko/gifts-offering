@@ -1,4 +1,5 @@
 import strawberry
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import TextChoices
 from django_choices_field import TextChoicesField
@@ -31,7 +32,8 @@ class Gift(MonitoredModel):
     fit_confidence = models.DecimalField(
         max_digits=10, decimal_places=1, help_text="Is this gift a good fit"
     )
-    points = models.DecimalField(max_digits=10, decimal_places=3)
+    points = models.DecimalField(max_digits=5, decimal_places=2)
+    order_amount_default = models.IntegerField(default=1)
 
     is_published = models.BooleanField(default=False)
 
@@ -50,7 +52,7 @@ class GiftImage(MonitoredModel):
 
 @strawberry.enum()
 class OrderStatus(TextChoices):
-    PENDING = "pending"
+    SUBMITTED = "submitted"
     WITHDRAWN = "withdrawn"
     CONFIRMED = "confirmed"
 
@@ -65,7 +67,11 @@ class GiftOrder(TimeStampedModel):
         related_query_name="order",
         related_name="order",
     )
-    status = TextChoicesField(OrderStatus, default=OrderStatus.PENDING)
+    amount = models.IntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+    )
+    status = TextChoicesField(OrderStatus, default=OrderStatus.SUBMITTED)
 
     # exclude as O2O aren't working well with history
     # https://github.com/jazzband/django-simple-history/issues/1031

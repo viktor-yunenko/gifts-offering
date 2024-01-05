@@ -13,7 +13,7 @@ export function useOrders() {
 
 export const GIFT_ORDERS_PENDING = gql(`
 	query GiftOrdersPending {
-		gift_orders(filters: { status: PENDING }) {
+		gift_orders(filters: { status: SUBMITTED }) {
 			id
 		}
 	}

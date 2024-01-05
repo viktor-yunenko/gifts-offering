@@ -1,8 +1,8 @@
-import { CButton } from "@chakra-ui/c-button";
-import { CFlex, CText } from "@chakra-ui/vue-next";
+import { CButton, CIconButton } from "@chakra-ui/c-button";
+import { CFlex, CIcon, CText, CVStack } from "@chakra-ui/vue-next";
 import { UModal } from "#components";
 
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref } from "vue";
 import { vModelUpdateEmit, vModelUpdateReceiver } from "~/utils/vModel";
 
 export const ConfirmPointsIgnoreModal = defineComponent({
@@ -11,25 +11,20 @@ export const ConfirmPointsIgnoreModal = defineComponent({
 			type: Boolean,
 			default: false,
 		},
-		giftId: {
-			type: String,
+		amountChangeRequested: {
+			type: Number,
 		},
 	},
 	emits: {
-		confirmed: (giftId: string) => true,
+		confirmed: (isAmountChange?: boolean) => true,
 		[vModelUpdateEmit]: (value: boolean) => true,
 	},
 	setup(props, { emit }) {
 		const isOpen = ref(false);
 
-		watch(
-			() => props.giftId,
-			() => {
-				console.log("props.giftId changed");
-				isOpen.value = true;
-			},
-			{ immediate: true },
-		);
+		const style = {
+			gap: 4,
+		};
 
 		return () => (
 			<UModal
@@ -40,24 +35,41 @@ export const ConfirmPointsIgnoreModal = defineComponent({
 					},
 				}}
 			>
-				<CFlex direction="column" p="6" gap="4" bg="white">
-					<CText fontSize="lg" my="-1">
-						Not enough points :'(
-					</CText>
-
-					<CText>
-						We can roll with it though! Assuming you won't feel awkward about
-						receiving that many gifts from me :P
-					</CText>
-					<CButton
-						onClick={() => {
-							emit(vModelUpdateEmit, false);
-							emit("confirmed", props.giftId!);
-						}}
-					>
-						Let's roll!
-					</CButton>
-				</CFlex>
+				<CVStack p="6" bg="white">
+					<CFlex w="100%" justify="space-between" align="center">
+						<CText fontSize="lg" my="-1">
+							Oh, not enough points
+						</CText>
+						<CIconButton
+							w="3"
+							color="gray.500"
+							/* @ts-ignore */
+							colorScheme="gray"
+							variant="ghost"
+							icon={<CIcon name="close" />}
+							onClick={() => {
+								emit(vModelUpdateEmit, false);
+							}}
+						/>
+					</CFlex>
+					<CVStack direction="column" spacing={style.gap} bg="white">
+						<CText>
+							We can roll with it though! Assuming you won't feel awkward about
+							receiving that many gifts from me :P
+						</CText>
+						<CFlex justify="flex-end">
+							<CButton
+								variant="outline"
+								onClick={() => {
+									emit(vModelUpdateEmit, false);
+									emit("confirmed", false);
+								}}
+							>
+								Let's roll!
+							</CButton>
+						</CFlex>
+					</CVStack>
+				</CVStack>
 			</UModal>
 		);
 	},

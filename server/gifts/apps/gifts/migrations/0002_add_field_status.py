@@ -27,12 +27,12 @@ class Migration(migrations.Migration):
             name="status",
             field=django_choices_field.fields.TextChoicesField(
                 choices=[
-                    ("pending", "Pending"),
+                    ("submitted", "Submitted"),
                     ("withdrawn", "Withdrawn"),
                     ("confirmed", "Confirmed"),
                 ],
                 choices_enum=gifts.apps.gifts.models.OrderStatus,
-                default="pending",
+                default="submitted",
                 max_length=9,
             ),
         ),
@@ -41,12 +41,12 @@ class Migration(migrations.Migration):
             name="status",
             field=django_choices_field.fields.TextChoicesField(
                 choices=[
-                    ("pending", "Pending"),
+                    ("submitted", "Submitted"),
                     ("withdrawn", "Withdrawn"),
                     ("confirmed", "Confirmed"),
                 ],
                 choices_enum=gifts.apps.gifts.models.OrderStatus,
-                default="pending",
+                default="submitted",
                 max_length=9,
             ),
         ),

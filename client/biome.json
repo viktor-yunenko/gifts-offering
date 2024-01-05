@@ -27,7 +27,10 @@
 		}
 	},
 	"formatter": {
-		"enabled": true
+		"enabled": true,
+		"include": [
+			"graphql/"
+		]
 	},
 	"files": {
 		"include": [
