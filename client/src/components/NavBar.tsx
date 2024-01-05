@@ -47,7 +47,7 @@ export const NavBar = defineComponent({
 				bottom="0"
 				w="100%"
 				justify="space-between"
-				border="1px solid"
+				borderTop="1px solid"
 				borderColor="gray.200"
 				boxShadow={"base"}
 				px={props.px}
@@ -56,15 +56,17 @@ export const NavBar = defineComponent({
 			>
 				<CFlex gap="1.5">
 					{auth.loading && (
-						<CTag
-							key={auth?.user()?.points}
-							animation={
-								isAnimatePointsOnChange.value
-									? `${keyframes`from, to { opacity: 1 } 50% { opacity: 0 }`} 0.4s linear 1`
-									: 0
-							}
-						>
-							{auth?.user()?.points}
+						<CTag>
+							<CText
+								key={auth?.user()?.points}
+								animation={
+									isAnimatePointsOnChange.value
+										? `${keyframes`from, to { opacity: 1 } 50% { opacity: 0 }`} 0.4s linear 1`
+										: 0
+								}
+							>
+								{auth?.user()?.points}
+							</CText>
 						</CTag>
 					)}
 					{!auth.loading && <CSkeleton w="11" h="100%" />}
