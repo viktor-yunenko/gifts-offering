@@ -7,8 +7,8 @@ import { marked } from "marked";
 import { defineComponent, ref, watch } from "vue";
 import type { PropType } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
+import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
 import { GIFTS_QUERY } from "~/components/index/Index";
-import { PointsIgnoreModal } from "~/components/index/PointsIgnoreModal";
 import { USER_QUERY } from "~/composables/useAuth";
 import { vModel } from "~/utils/vModel";
 import { gql } from "#graphql";
@@ -85,7 +85,7 @@ export const GiftCard = defineComponent({
 
 		return () => (
 			<CVStack gap="3" w="100%">
-				<PointsIgnoreModal
+				<ConfirmPointsIgnoreModal
 					giftId={props.gift.id}
 					onConfirmed={async (giftId) =>
 						await onGiftOrderRequest(giftId, "submit", {

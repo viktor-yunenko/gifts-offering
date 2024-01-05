@@ -1,7 +1,7 @@
 import { CFlex } from "@chakra-ui/vue-next";
 import { useQuery } from "@vue/apollo-composable";
 import { defineComponent } from "vue";
-import { GiftCard } from "~/components/index/GiftCard";
+import { GiftCard } from "~/components/index/GiftCard/GiftCard";
 import { gql } from "#graphql";
 
 export const Index = defineComponent({

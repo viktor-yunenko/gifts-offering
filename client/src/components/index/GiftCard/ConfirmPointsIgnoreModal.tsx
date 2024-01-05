@@ -5,7 +5,7 @@ import { UModal } from "#components";
 import { defineComponent, ref, watch } from "vue";
 import { vModelUpdateEmit, vModelUpdateReceiver } from "~/utils/vModel";
 
-export const PointsIgnoreModal = defineComponent({
+export const ConfirmPointsIgnoreModal = defineComponent({
 	props: {
 		modelValue: {
 			type: Boolean,
