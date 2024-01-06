@@ -136,15 +136,16 @@ if DEBUG:
 
 ASGI_APPLICATION = "gifts.asgi.application"
 
-FRONTEND_URL = env.str("FRONTEND_URL", "http://localhost:3000")
-BACKEND_URL = env.str("BACKEND_URL", "http://localhost:8000")
+CLIENT_URL = env.str("CLIENT_URL", "http://localhost:3000")
+SERVER_URL = env.str("SERVER_URL", "http://localhost:8000")
+DOMAIN = env.str("DOMAIN", CLIENT_URL.replace("https://", "").replace("http://", ""))
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
-    BACKEND_URL,
-    BACKEND_URL.replace("http://", "https://"),
-    FRONTEND_URL,
-    FRONTEND_URL.replace("http://", "https://"),
+    SERVER_URL,
+    SERVER_URL.replace("http://", "https://"),
+    CLIENT_URL,
+    CLIENT_URL.replace("http://", "https://"),
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r"^/api/.*$"
@@ -160,6 +161,8 @@ CORS_ALLOW_HEADERS = (
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "https://localhost:3000",
+    CLIENT_URL,
+    SERVER_URL,
 ]
 SITE_ID = 1
 ALLOWED_HOSTS = env.list(
@@ -168,7 +171,7 @@ ALLOWED_HOSTS = env.list(
         ".localhost",
         "127.0.0.1",
         "[::1]",
-        BACKEND_URL.replace("http://", "").replace("https://", ""),
+        SERVER_URL.replace("http://", "").replace("https://", ""),
     ],
 )
 RENDER_EXTERNAL_HOSTNAME = env.str("RENDER_EXTERNAL_HOSTNAME", "")
@@ -254,7 +257,7 @@ CACHES = {
 }
 
 AUTH_USER_MODEL = "gifts_auth.User"
-LOGIN_REDIRECT_URL = FRONTEND_URL
+LOGIN_REDIRECT_URL = CLIENT_URL
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

@@ -44,7 +44,7 @@ envVarGroups:
         value: prod
       - key: PYTHON_VERSION
         value: 3.12.1
-      - key: BACKEND_URL
+      - key: SERVER_URL
         sync: false
-      - key: FRONTEND_URL
+      - key: CLIENT_URL
         sync: false

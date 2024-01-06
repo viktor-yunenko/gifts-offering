@@ -6,7 +6,7 @@ export default defineNuxtModule<ModuleOptions>({
 		await installModule("@nuxtjs/apollo", {
 			clients: {
 				default: {
-					httpEndpoint: "http://localhost:8000/api/graphql",
+					httpEndpoint: `${nuxt.options.runtimeConfig?.public?.serverUrl}/api/graphql`,
 					httpLinkOptions: {
 						fetch: fetchWithReadableUrl,
 						credentials: "include",

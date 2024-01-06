@@ -12,10 +12,10 @@ def send_email(
     template_name: str = None,
     content_html: str = "",
     template_context: dict = {},  # noqa B006
-    email_from: str = "Gifts <support@eawork.org>",
+    email_from: str = f"Gifts <support@{settings.DOMAIN}>",
     is_track_clicks: bool = False,
     is_track_opens: bool = False,
-    frontend_url: str = None,
+    CLIENT_URL: str = None,
     attachment_path: str = None,
 ) -> str:
     context_txt = ""
@@ -24,8 +24,8 @@ def send_email(
         content_html = template_html.render(
             {
                 "settings": {
-                    "BACKEND_URL": settings.BACKEND_URL,
-                    "FRONTEND_URL": frontend_url or settings.FRONTEND_URL,
+                    "SERVER_URL": settings.SERVER_URL,
+                    "CLIENT_URL": CLIENT_URL or settings.CLIENT_URL,
                 },
                 **template_context,
             }

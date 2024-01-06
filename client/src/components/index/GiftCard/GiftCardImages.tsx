@@ -1,3 +1,4 @@
+import { useRuntimeConfig } from "#app";
 import { CBox, CCenter, CImage } from "@chakra-ui/vue-next";
 import { css } from "@emotion/css";
 import { Pagination } from "swiper/modules";
@@ -14,6 +15,8 @@ export const GiftCardImages = defineComponent({
 		},
 	},
 	setup(props) {
+		const config = useRuntimeConfig();
+
 		if (props.gift.images.length === 0) {
 			return null;
 		}
@@ -41,7 +44,7 @@ export const GiftCardImages = defineComponent({
 						<SwiperSlide key={image.id}>
 							<CCenter>
 								<CImage
-									src={`http://localhost:8000${image.image.url}`}
+									src={`${config.public.serverUrl}${image.image.url}`}
 									maxH="200px"
 									maxW="fit-content"
 								/>

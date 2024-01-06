@@ -54,7 +54,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 						maskAllInputs: false,
 						maskAllText: false,
 						blockAllMedia: false,
-						networkDetailAllowUrls: ["localhost:8000"],
+						networkDetailAllowUrls: [nuxtApp.$config.public.serverUrl],
 					}),
 				);
 				isReplayInitialized.value = true;
