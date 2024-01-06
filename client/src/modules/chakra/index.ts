@@ -5,6 +5,7 @@ import MdStar from "@iconify-icons/line-md/star";
 import MdStarFilled from "@iconify-icons/line-md/star-filled";
 import MdStarFilledHalf from "@iconify-icons/line-md/star-filled-half";
 import type { IconifyIcon } from "@iconify/types";
+import { defaultIconProps } from "@iconify/utils";
 import { defineNuxtModule, installModule } from "@nuxt/kit";
 import type { ModuleOptions } from "@nuxt/schema";
 import {
@@ -145,12 +146,14 @@ export default defineNuxtModule<ModuleOptions>({
 });
 
 function getIconifyProps(name: string, icon: IconifyIcon) {
+	const iconComplete = {
+		path: icon.body,
+		...defaultIconProps,
+	};
 	return {
 		[name]: {
 			path: icon.body,
-			viewBox: `${icon.left ?? "none"} ${icon.top ?? "none"} ${
-				icon.width ?? "none"
-			} ${icon.height ?? "none"}`,
+			viewBox: `${iconComplete.left} ${iconComplete.top} ${iconComplete.width} ${iconComplete.height}`,
 		},
 	};
 }

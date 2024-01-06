@@ -16,6 +16,7 @@
     "@chakra-ui/vue-next": "^2.1.0-beta.11",
     "@iconify-icons/bi": "^1.2.19",
     "@iconify-icons/line-md": "^1.2.30",
+    "@iconify/utils": "^2.1.14",
     "@nuxt/ui": "^2.11.1",
     "@nuxtjs/apollo": "next",
     "@sentry/vue": "^7.91.0",
