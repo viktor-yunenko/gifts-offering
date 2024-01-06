@@ -1,4 +1,5 @@
 import { CFlex } from "@chakra-ui/vue-next";
+import { injectGlobal } from "@emotion/css";
 import { defineComponent, ref } from "vue";
 import { NavBar } from "~/components/NavBar";
 import { NuxtLoadingIndicator } from "#components";
@@ -9,6 +10,13 @@ export default defineComponent({
 		const style = {
 			p: 5,
 		};
+
+		injectGlobal`
+			html {
+				// to show when user on mobile touch-drags the vertical viewport outside of its bounds
+				background: var(--chakra-colors-gray-100);
+			}
+		`;
 
 		return () => (
 			<CFlex
