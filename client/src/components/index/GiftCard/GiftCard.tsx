@@ -7,6 +7,7 @@ import {
 	CImage,
 	CVStack,
 } from "@chakra-ui/vue-next";
+import { css } from "@emotion/css";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
 import { gql } from "#graphql";
@@ -105,23 +106,33 @@ export const GiftCard = defineComponent({
 					{props.gift.name}
 				</CHeading>
 
-				<Swiper
-					direction="horizontal"
-					pagination={{ clickable: true }}
-					modules={[Pagination]}
+				<CBox
+					class={css`
+						--swiper-pagination-bottom: -20px;
+						.swiper {
+							overflow: visible;
+						}
+					`}
+					pb="3"
 				>
-					{props.gift.images.map((image) => (
-						<SwiperSlide key={image.id}>
-							<CCenter pb="10">
-								<CImage
-									src={`http://localhost:8000${image.image.url}`}
-									maxH="200px"
-									maxW="fit-content"
-								/>
-							</CCenter>
-						</SwiperSlide>
-					))}
-				</Swiper>
+					<Swiper
+						direction="horizontal"
+						pagination={{ clickable: true }}
+						modules={[Pagination]}
+					>
+						{props.gift.images.map((image) => (
+							<SwiperSlide key={image.id}>
+								<CCenter>
+									<CImage
+										src={`http://localhost:8000${image.image.url}`}
+										maxH="200px"
+										maxW="fit-content"
+									/>
+								</CCenter>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</CBox>
 
 				<CBox
 					innerHTML={marked.parse(props.gift.description_short) as string}
