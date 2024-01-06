@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -21,6 +22,7 @@
     "@nuxtjs/apollo": "next",
     "@sentry/vue": "^7.91.0",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "feather-icons-paths": "^1.1.1",
     "marked": "^11.1.0",
     "nuxt": "^3.9.0",
     "sass": "^1.69.6",

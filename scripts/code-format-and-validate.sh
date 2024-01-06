@@ -15,9 +15,9 @@ bash ./scripts/graphql-schema-gen.sh
 
 cd client/ || error_messages+="Failed to change directory to 'client/'"$'\n'
 printf "running client/biome...\n"
-bun run format >$temp_file 2>&1 || error_messages+="prettier command failed:\n$(cat $temp_file)"$'\n'
+yarn run format >$temp_file 2>&1 || error_messages+="prettier command failed:\n$(cat $temp_file)"$'\n'
 printf "running client/tsc...\n"
-bun run tsc >$temp_file 2>&1 || error_messages+="tsc-validate command failed:\n$(cat $temp_file)"$'\n'
+yarn run tsc >$temp_file 2>&1 || error_messages+="tsc-validate command failed:\n$(cat $temp_file)"$'\n'
 
 rm $temp_file
 
