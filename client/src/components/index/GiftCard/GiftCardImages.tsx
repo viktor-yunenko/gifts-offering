@@ -14,6 +14,10 @@ export const GiftCardImages = defineComponent({
 		},
 	},
 	setup(props) {
+		if (props.gift.images.length === 0) {
+			return null;
+		}
+
 		return () => (
 			<CBox
 				class={css`

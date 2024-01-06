@@ -54,7 +54,7 @@ export const NavBar = defineComponent({
 			>
 				<CFlex gap="1.5">
 					{auth.loading && (
-						<CTag>
+						<CTag colorScheme="sky">
 							<CText
 								key={auth?.user()?.points}
 								animation={
@@ -76,13 +76,13 @@ export const NavBar = defineComponent({
 						key={orders.ordersPendingCount()}
 						color="gray.500"
 						align="center"
-						gap="2"
+						gap="1"
 					>
-						<CIcon name="bi-gift" color="cyan.600" />
+						<CIcon boxSize="6" name="bi-gift" color="cyan.600" mb="-7px" />
 						<CTag colorScheme="cyan">{orders.ordersPendingCount()}</CTag>
 					</CFlex>
 				) : (
-					<CFlex color="gray.500">Don't be shy :)</CFlex>
+					<CFlex color="gray.700">Don't be shy :)</CFlex>
 				)}
 			</CFlex>
 		);

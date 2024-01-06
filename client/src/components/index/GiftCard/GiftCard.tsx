@@ -1,8 +1,9 @@
-import { CBox, CFlex, CHeading } from "@chakra-ui/vue-next";
+import { CFlex, CHeading } from "@chakra-ui/vue-next";
 import type { PropType } from "vue";
 import { computed, defineComponent } from "vue";
 import { GiftCardActions } from "~/components/index/GiftCard/GiftCardActions/GiftCardActions";
 import { GiftCardDescription } from "~/components/index/GiftCard/GiftCardDescription";
+import { GiftCardFitConfidence } from "~/components/index/GiftCard/GiftCardFitConfidence";
 import { GiftCardImages } from "~/components/index/GiftCard/GiftCardImages";
 import type { Gift } from "~/components/index/GiftCard/types";
 import { OrderStatus } from "#graphql/graphql";
@@ -32,6 +33,7 @@ export const GiftCard = defineComponent({
 				p={style.spacing}
 				borderRadius="md"
 				boxShadow="md"
+				overflow="hidden"
 			>
 				<CHeading
 					size="md"
@@ -40,13 +42,11 @@ export const GiftCard = defineComponent({
 					{props.gift.name}
 				</CHeading>
 
+				<GiftCardFitConfidence gift={props.gift} />
+
 				<GiftCardImages gift={props.gift} />
 
 				<GiftCardDescription gift={props.gift} />
-
-				<CFlex justify="space-between">
-					<CBox>{props.gift.fit_confidence}</CBox>
-				</CFlex>
 
 				<GiftCardActions gift={props.gift} />
 			</CFlex>
