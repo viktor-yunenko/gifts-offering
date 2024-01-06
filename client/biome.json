@@ -41,6 +41,6 @@
 			"nuxt.config.ts",
 			"graphql/"
 		],
-		"ignore": ["graphql/", ".nuxt/", "biome.json"]
+		"ignore": ["graphql/", ".nuxt/", ".output/", "biome.json"]
 	}
 }
