@@ -5,7 +5,7 @@ import {
 	CFlex,
 	CHeading,
 	CImage,
-	CVStack,
+	useTheme,
 } from "@chakra-ui/vue-next";
 import { css } from "@emotion/css";
 import { captureException } from "@sentry/vue";
@@ -18,7 +18,7 @@ import { marked } from "marked";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import type { PropType } from "vue";
-import { defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
 import { appQueries } from "~/appQueries";
 import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
@@ -36,6 +36,7 @@ export const GiftCard = defineComponent({
 	setup(props: { gift: GiftsQuery["gifts"][number] }) {
 		const loadingIndicator = useLoadingIndicator();
 		const notify = useNotify();
+		const theme = useTheme();
 
 		const confettiTrigger = ref(0);
 		const isOrderPending = ref(false);
@@ -53,6 +54,10 @@ export const GiftCard = defineComponent({
 			GIFT_ORDER_SUBMIT_OR_WITHDRAW,
 			{ refetchQueries: appQueries },
 		);
+
+		const style = {
+			spacing: 6,
+		};
 
 		async function onOrderSubmitOrWithdraw(
 			status: OrderStatus,
@@ -81,12 +86,24 @@ export const GiftCard = defineComponent({
 			loadingIndicator.finish();
 		}
 
+		const listStyleFill = computed(() => {
+			// @ts-ignore
+			const listStylePrimary = theme.colors.fuchsia[500];
+			// @ts-ignore
+			const listStyleSecondary = theme.colors.cyan[500];
+
+			return isOrderPending.value
+				? listStyleSecondary.replace("#", "%23")
+				: listStylePrimary.replace("#", "%23");
+		});
+
 		return () => (
-			<CVStack
-				gap="3"
+			<CFlex
+				direction="column"
+				gap={style.spacing / 2}
 				w="100%"
 				bg="white"
-				p="6"
+				p={style.spacing}
 				borderRadius="md"
 				boxShadow="md"
 			>
@@ -136,6 +153,18 @@ export const GiftCard = defineComponent({
 
 				<CBox
 					innerHTML={marked.parse(props.gift.description_short) as string}
+					sx={{
+						ul: {
+							listStyleImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 22 22" fill="${listStyleFill.value}"><circle cx="8" cy="8" r="8"/></svg>')`,
+							ml: 5,
+						},
+						i: {
+							fontStyle: "italic",
+						},
+						strong: {
+							fontWeight: "bold",
+						},
+					}}
 				/>
 
 				<CFlex justify="space-between">
@@ -151,7 +180,7 @@ export const GiftCard = defineComponent({
 								loading={loadingIndicator.isLoading}
 								variant="solid"
 							>
-								Yes please
+								That's a yes
 							</CButton>
 						)}
 						{isOrderPending.value && (
@@ -183,7 +212,7 @@ export const GiftCard = defineComponent({
 						</CBox>
 					)}
 				</CFlex>
-			</CVStack>
+			</CFlex>
 		);
 	},
 });
