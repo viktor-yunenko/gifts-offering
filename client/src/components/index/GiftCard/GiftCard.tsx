@@ -5,6 +5,8 @@ import {
 	CFlex,
 	CHeading,
 	CImage,
+	CTag,
+	CText,
 	useTheme,
 } from "@chakra-ui/vue-next";
 import { css } from "@emotion/css";
@@ -168,11 +170,20 @@ export const GiftCard = defineComponent({
 				/>
 
 				<CFlex justify="space-between">
-					<CBox>{props.gift.points}</CBox>
 					<CBox>{props.gift.fit_confidence}</CBox>
 				</CFlex>
 
-				<CFlex w="100%" justify="flex-end" pos="relative">
+				<CFlex w="100%" justify="space-between" pos="relative">
+					<CFlex gap="2" align="center">
+						<CTag
+							key={isOrderPending.value.toString()}
+							colorScheme={isOrderPending.value ? "cyan" : "fuchsia"}
+						>
+							{props.gift.points}
+						</CTag>
+						<CText>points</CText>
+					</CFlex>
+
 					<CFlex gap="3">
 						{!isOrderPending.value && (
 							<CButton
