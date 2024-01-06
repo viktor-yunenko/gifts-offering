@@ -1,5 +1,12 @@
 import { CButton } from "@chakra-ui/c-button";
-import { CBox, CFlex, CHeading, CImage, CVStack } from "@chakra-ui/vue-next";
+import {
+	CBox,
+	CCenter,
+	CFlex,
+	CHeading,
+	CImage,
+	CVStack,
+} from "@chakra-ui/vue-next";
 import { captureException } from "@sentry/vue";
 import { useMutation } from "@vue/apollo-composable";
 import { gql } from "#graphql";
@@ -7,6 +14,7 @@ import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { useLoadingIndicator, useNotify } from "#imports";
 
 import { marked } from "marked";
+import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import type { PropType } from "vue";
 import { defineComponent, ref, watch } from "vue";
@@ -97,14 +105,20 @@ export const GiftCard = defineComponent({
 					{props.gift.name}
 				</CHeading>
 
-				<Swiper direction="horizontal">
+				<Swiper
+					direction="horizontal"
+					pagination={{ clickable: true }}
+					modules={[Pagination]}
+				>
 					{props.gift.images.map((image) => (
 						<SwiperSlide key={image.id}>
-							<CImage
-								src={`http://localhost:8000${image.image.url}`}
-								maxH="200px"
-								maxW="fit-content"
-							/>
+							<CCenter pb="10">
+								<CImage
+									src={`http://localhost:8000${image.image.url}`}
+									maxH="200px"
+									maxW="fit-content"
+								/>
+							</CCenter>
 						</SwiperSlide>
 					))}
 				</Swiper>

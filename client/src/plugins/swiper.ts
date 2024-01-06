@@ -1,4 +1,6 @@
 import "swiper/css";
+import "swiper/css/pagination";
+
 import { defineNuxtPlugin } from "#app";
 
 export default defineNuxtPlugin((nuxtApp) => {
