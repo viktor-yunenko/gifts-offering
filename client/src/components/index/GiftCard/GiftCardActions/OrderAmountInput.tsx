@@ -9,7 +9,7 @@ import { useLoadingIndicator, useNotify } from "#imports";
 import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 import { appQueries } from "~/appQueries";
-import { OrderConfirmModal } from "~/components/index/GiftCard/OrderConfirmModal";
+import { OrderConfirmModal } from "~/components/index/GiftCard/GiftCardActions/OrderConfirmModal";
 import { vModel } from "~/utils/vModel";
 
 type Order = NonNullable<GiftsQuery["gifts"][number]["order"]>;
