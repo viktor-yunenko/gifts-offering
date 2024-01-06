@@ -8,8 +8,8 @@ server setup
 - python manage.py shell
   ```python
   from gifts.apps.auth.models import User
-  user = User.objects.create(email="admin@eawork.org", is_superuser=True, is_staff=True, is_active=True)
-  user.set_password("admin@eawork.org")
+  user = User.objects.create(email="admin@example.com", is_superuser=True, is_staff=True, is_active=True)
+  user.set_password("admin@example.com")
   user.save()
   ```
 - python manage.py runserver
@@ -18,3 +18,7 @@ client setup
 - cd client/
 - bun install
 - bun run dev
+
+### Deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
