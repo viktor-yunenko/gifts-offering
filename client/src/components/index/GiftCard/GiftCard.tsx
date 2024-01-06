@@ -37,7 +37,7 @@ export const GiftCard = defineComponent({
 			>
 				<CHeading
 					size="md"
-					color={isOrderPending.value ? "cyan.600" : "fuchsia.600"}
+					color={isOrderPending.value ? "gray.600" : "fuchsia.600"}
 				>
 					{props.gift.name}
 				</CHeading>

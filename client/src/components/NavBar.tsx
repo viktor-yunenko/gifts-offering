@@ -52,7 +52,7 @@ export const NavBar = defineComponent({
 				bg="white"
 				boxShadow="lg"
 			>
-				<CFlex gap="1.5">
+				<CFlex gap="1.5" px="2px">
 					{auth.loading && (
 						<CTag colorScheme="sky">
 							<CText

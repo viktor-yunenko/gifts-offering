@@ -21,7 +21,11 @@ export const GiftCardImages = defineComponent({
 		return () => (
 			<CBox
 				class={css`
-						--swiper-pagination-bottom: -20px;
+						--swiper-pagination-bottom: -1px;
+						--swiper-pagination-color: var(--chakra-colors-cyan-400);
+						--swiper-pagination-bullet-inactive-color: var(--chakra-colors-gray-200);
+						--swiper-pagination-bullet-inactive-opacity: 1;
+
 						.swiper {
 							overflow: visible;
 						}
