@@ -9,7 +9,7 @@ import { useLoadingIndicator, useNotify } from "#imports";
 import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 import { appQueries } from "~/appQueries";
-import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
+import { OrderConfirmModal } from "~/components/index/GiftCard/OrderConfirmModal";
 import { vModel } from "~/utils/vModel";
 
 type Order = NonNullable<GiftsQuery["gifts"][number]["order"]>;
@@ -61,7 +61,7 @@ export const OrderAmountInput = defineComponent({
 
 		return () => (
 			<CFlex>
-				<ConfirmPointsIgnoreModal
+				<OrderConfirmModal
 					{...vModel(isConfirmModalOpen)}
 					onConfirmed={async () => {
 						await onOrderUpdateAmount({ isIgnorePointsBalance: true });

@@ -23,7 +23,7 @@ import type { PropType } from "vue";
 import { computed, defineComponent, ref, watch } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
 import { appQueries } from "~/appQueries";
-import { ConfirmPointsIgnoreModal } from "~/components/index/GiftCard/ConfirmPointsIgnoreModal";
+import { OrderConfirmModal } from "~/components/index/GiftCard/OrderConfirmModal";
 import { OrderAmountInput } from "~/components/index/GiftCard/OrderAmountInput";
 import { vModel } from "~/utils/vModel";
 
@@ -109,7 +109,7 @@ export const GiftCard = defineComponent({
 				borderRadius="md"
 				boxShadow="md"
 			>
-				<ConfirmPointsIgnoreModal
+				<OrderConfirmModal
 					{...vModel(isConfirmModalOpen)}
 					onConfirmed={async () => {
 						await onOrderSubmitOrWithdraw(OrderStatus.Submitted, {
