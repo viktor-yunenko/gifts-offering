@@ -33,7 +33,7 @@
     django-anymail = "^10.2"
     django-extensions = "^3.2.3" # for shell_plus
         ipython = "^8.14.0"
-    strawberry-graphql = {extras = ["channels"], version = "^0.217.0"}
+    strawberry-graphql = {extras = ["channels"], version = "^0.217.1"}
     strawberry-graphql-django = "^0.28.3"
 
     python-environ = "^0.4.54"
