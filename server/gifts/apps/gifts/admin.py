@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from adminsortable2.admin import SortableAdminBase
+from adminsortable2.admin import SortableTabularInline
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 
@@ -8,8 +10,14 @@ from gifts.apps.gifts.models import GiftImage
 from gifts.apps.gifts.models import GiftOrder
 
 
+class GiftImageTabularInline(SortableTabularInline):
+    template = "adminsortable2/edit_inline/tabular-django-4.2.html"
+    model = GiftImage
+    extra = 0
+
+
 @admin.register(Gift)
-class GiftAdmin(SimpleHistoryAdmin):
+class GiftAdmin(SortableAdminBase, SimpleHistoryAdmin):
     list_display = [
         "name",
         "points",
@@ -25,13 +33,7 @@ class GiftAdmin(SimpleHistoryAdmin):
         "updated_at",
     ]
     search_fields = ["name", "description"]
-
-
-@admin.register(GiftImage)
-class GiftImageAdmin(SimpleHistoryAdmin):
-    list_display = ["gift", "caption", "created_at"]
-    list_filter = ["created_at"]
-    search_fields = ["caption", "gift__name"]
+    inlines = [GiftImageTabularInline]
 
 
 @admin.register(GiftOrder)

@@ -1,6 +1,9 @@
 import type { ThemeOverride } from "@chakra-ui/theme-utils";
 import { extendTheme } from "@chakra-ui/vue-next";
 import BiGfit from "@iconify-icons/bi/gift";
+import MdStar from "@iconify-icons/line-md/star";
+import MdStarFilled from "@iconify-icons/line-md/star-filled";
+import MdStarFilledHalf from "@iconify-icons/line-md/star-filled-half";
 import type { IconifyIcon } from "@iconify/types";
 import { defineNuxtModule, installModule } from "@nuxt/kit";
 import type { ModuleOptions } from "@nuxt/schema";
@@ -20,6 +23,9 @@ export default defineNuxtModule<ModuleOptions>({
 			icons: {
 				extend: {
 					...getIconifyProps("bi-gift", BiGfit),
+					...getIconifyProps("md-star", MdStar),
+					...getIconifyProps("md-star-filled", MdStarFilled),
+					...getIconifyProps("md-star-filled-half", MdStarFilledHalf),
 				},
 				library: {
 					feX,

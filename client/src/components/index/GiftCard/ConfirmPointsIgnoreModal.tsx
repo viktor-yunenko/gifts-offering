@@ -1,5 +1,5 @@
 import { CButton, CIconButton } from "@chakra-ui/c-button";
-import { CFlex, CIcon, CText, CVStack } from "@chakra-ui/vue-next";
+import { CFlex, CText, CVStack } from "@chakra-ui/vue-next";
 import { UModal } from "#components";
 
 import { defineComponent, ref } from "vue";
@@ -46,10 +46,11 @@ export const ConfirmPointsIgnoreModal = defineComponent({
 							/* @ts-ignore */
 							colorScheme="gray"
 							variant="ghost"
-							icon={<CIcon name="close" />}
+							icon="close"
 							onClick={() => {
 								emit(vModelUpdateEmit, false);
 							}}
+							ariaLabel="Close modal"
 						/>
 					</CFlex>
 					<CVStack direction="column" spacing={style.gap} bg="white">

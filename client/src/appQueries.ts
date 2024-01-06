@@ -1,6 +1,6 @@
-import { gql } from "#graphql";
 import { USER_QUERY } from "~/composables/useAuth";
 import { GIFT_ORDERS_PENDING } from "~/composables/useOrders";
+import { gql } from "#graphql";
 
 export const appQueries = () => [
 	{ query: GIFTS_QUERY },
@@ -13,9 +13,13 @@ export const GIFTS_QUERY = gql(`
 		gifts {
 			id
 			name
-			image_card {
-				path
-				url
+			images {
+				id
+				order
+				image {
+					url
+					path
+				}
 			}
 			description_short
 			points

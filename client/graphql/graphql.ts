@@ -55,6 +55,7 @@ export type GiftImageType = {
 	gift: GiftType;
 	id: Scalars["ID"]["output"];
 	image: DjangoImageType;
+	order: Scalars["Int"]["output"];
 	updated_at: Scalars["DateTime"]["output"];
 };
 
@@ -93,7 +94,7 @@ export type GiftType = {
 	description_short: Scalars["String"]["output"];
 	fit_confidence: Scalars["Decimal"]["output"];
 	id: Scalars["ID"]["output"];
-	image_card: DjangoImageType;
+	images: Array<GiftImageType>;
 	is_published: Scalars["Boolean"]["output"];
 	name: Scalars["String"]["output"];
 	order?: Maybe<GiftOrderType>;
@@ -170,6 +171,32 @@ export type UserType = {
 	points: Scalars["Decimal"]["output"];
 };
 
+export type GiftsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GiftsQuery = {
+	__typename?: "Query";
+	gifts: Array<{
+		__typename?: "GiftType";
+		id: string;
+		name: string;
+		description_short: string;
+		points: any;
+		fit_confidence: any;
+		images: Array<{
+			__typename?: "GiftImageType";
+			id: string;
+			order: number;
+			image: { __typename?: "DjangoImageType"; url: string; path: string };
+		}>;
+		order?: {
+			__typename?: "GiftOrderType";
+			id: string;
+			status: OrderStatus;
+			amount: number;
+		} | null;
+	}>;
+};
+
 export type GiftOrderSubmitOrWithdrawMutationVariables = Exact<{
 	giftId: Scalars["ID"]["input"];
 	status: OrderStatus;
@@ -192,27 +219,6 @@ export type GiftOrderUpdateAmountMutation = {
 	gift_order_update_amount: { __typename?: "GiftOrderType"; id: string };
 };
 
-export type GiftsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GiftsQuery = {
-	__typename?: "Query";
-	gifts: Array<{
-		__typename?: "GiftType";
-		id: string;
-		name: string;
-		description_short: string;
-		points: any;
-		fit_confidence: any;
-		image_card: { __typename?: "DjangoImageType"; path: string; url: string };
-		order?: {
-			__typename?: "GiftOrderType";
-			id: string;
-			status: OrderStatus;
-			amount: number;
-		} | null;
-	}>;
-};
-
 export type UserCurrentQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UserCurrentQuery = {
@@ -232,6 +238,87 @@ export type GiftOrdersPendingQuery = {
 	gift_orders: Array<{ __typename?: "GiftOrderType"; id: string }>;
 };
 
+export const GiftsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "Gifts" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "gifts" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "id" } },
+								{ kind: "Field", name: { kind: "Name", value: "name" } },
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "images" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{ kind: "Field", name: { kind: "Name", value: "order" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "image" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "url" },
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "path" },
+														},
+													],
+												},
+											},
+										],
+									},
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "description_short" },
+								},
+								{ kind: "Field", name: { kind: "Name", value: "points" } },
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "fit_confidence" },
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "order" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "status" },
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "amount" },
+											},
+										],
+									},
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
 export const GiftOrderSubmitOrWithdrawDocument = {
 	kind: "Document",
 	definitions: [
@@ -409,70 +496,6 @@ export const GiftOrderUpdateAmountDocument = {
 	GiftOrderUpdateAmountMutation,
 	GiftOrderUpdateAmountMutationVariables
 >;
-export const GiftsDocument = {
-	kind: "Document",
-	definitions: [
-		{
-			kind: "OperationDefinition",
-			operation: "query",
-			name: { kind: "Name", value: "Gifts" },
-			selectionSet: {
-				kind: "SelectionSet",
-				selections: [
-					{
-						kind: "Field",
-						name: { kind: "Name", value: "gifts" },
-						selectionSet: {
-							kind: "SelectionSet",
-							selections: [
-								{ kind: "Field", name: { kind: "Name", value: "id" } },
-								{ kind: "Field", name: { kind: "Name", value: "name" } },
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "image_card" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "path" } },
-											{ kind: "Field", name: { kind: "Name", value: "url" } },
-										],
-									},
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "description_short" },
-								},
-								{ kind: "Field", name: { kind: "Name", value: "points" } },
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "fit_confidence" },
-								},
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "order" },
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{ kind: "Field", name: { kind: "Name", value: "id" } },
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "status" },
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "amount" },
-											},
-										],
-									},
-								},
-							],
-						},
-					},
-				],
-			},
-		},
-	],
-} as unknown as DocumentNode<GiftsQuery, GiftsQueryVariables>;
 export const UserCurrentDocument = {
 	kind: "Document",
 	definitions: [

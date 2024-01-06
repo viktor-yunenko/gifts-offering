@@ -7,6 +7,7 @@ import { type GiftsQuery, OrderStatus } from "#graphql/graphql";
 import { useLoadingIndicator, useNotify } from "#imports";
 
 import { marked } from "marked";
+import { Swiper, SwiperSlide } from "swiper/vue";
 import type { PropType } from "vue";
 import { defineComponent, ref, watch } from "vue";
 import ConfettiExplosion from "vue-confetti-explosion";
@@ -29,11 +30,7 @@ export const GiftCard = defineComponent({
 
 		const confettiTrigger = ref(0);
 		const isOrderPending = ref(false);
-
-		const confirmModalProps = {
-			isOpen: ref(false),
-			amountChangeRequested: ref<number | null>(null),
-		};
+		const isConfirmModalOpen = ref(false);
 
 		watch(
 			() => props.gift.order?.status,
@@ -65,7 +62,7 @@ export const GiftCard = defineComponent({
 				}
 			} catch (error: any) {
 				if (error?.message === "not_enough_points") {
-					confirmModalProps.isOpen.value = true;
+					isConfirmModalOpen.value = true;
 				} else {
 					notify.error(error?.message ?? "error");
 					captureException(error);
@@ -85,7 +82,7 @@ export const GiftCard = defineComponent({
 				boxShadow="md"
 			>
 				<ConfirmPointsIgnoreModal
-					{...vModel(confirmModalProps.isOpen)}
+					{...vModel(isConfirmModalOpen)}
 					onConfirmed={async () => {
 						await onOrderSubmitOrWithdraw(OrderStatus.Submitted, {
 							isIgnorePointsBalance: true,
@@ -99,11 +96,19 @@ export const GiftCard = defineComponent({
 				>
 					{props.gift.name}
 				</CHeading>
-				<CImage
-					src={`http://localhost:8000${props.gift.image_card.url}`}
-					maxH="200px"
-					maxW="fit-content"
-				/>
+
+				<Swiper direction="horizontal">
+					{props.gift.images.map((image) => (
+						<SwiperSlide key={image.id}>
+							<CImage
+								src={`http://localhost:8000${image.image.url}`}
+								maxH="200px"
+								maxW="fit-content"
+							/>
+						</SwiperSlide>
+					))}
+				</Swiper>
+
 				<CBox
 					innerHTML={marked.parse(props.gift.description_short) as string}
 				/>

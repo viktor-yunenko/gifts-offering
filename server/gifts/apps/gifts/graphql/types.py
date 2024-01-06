@@ -14,6 +14,7 @@ from gifts.apps.gifts.models import OrderStatus
 @strawberry_django.type(Gift, fields="__all__")
 class GiftType:
     order: GiftOrderType | None
+    images: list[GiftImageType]
 
     @classmethod
     def get_queryset(cls, queryset: QuerySet[Gift], info: Info) -> QuerySet[Gift]:

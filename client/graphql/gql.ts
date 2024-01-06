@@ -13,12 +13,12 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+	"\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timages {\n\t\t\t\tid\n\t\t\t\torder\n\t\t\t\timage {\n\t\t\t\t\turl\n\t\t\t\t\tpath\n\t\t\t\t}\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GiftsDocument,
 	"\n\tmutation GiftOrderSubmitOrWithdraw(\n\t\t$giftId: ID!\n\t\t$status: OrderStatus!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_submit_or_withdraw(\n\t\t\tgift_id: $giftId\n\t\t\tstatus: $status\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n":
 		types.GiftOrderSubmitOrWithdrawDocument,
 	"\n\tmutation GiftOrderUpdateAmount(\n\t\t$orderId: ID!\n\t\t$amount: Int!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_update_amount(\n\t\t\torder_id: $orderId\n\t\t\tamount: $amount\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n":
 		types.GiftOrderUpdateAmountDocument,
-	"\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timage_card {\n\t\t\t\tpath\n\t\t\t\turl\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n":
-		types.GiftsDocument,
 	"\n\tquery UserCurrent {\n\t\tuser_current {\n\t\t\tid\n\t\t\tfirst_name\n\t\t\tpoints\n\t\t}\n\t}\n":
 		types.UserCurrentDocument,
 	"\n\tquery GiftOrdersPending {\n\t\tgift_orders(filters: { status: SUBMITTED }) {\n\t\t\tid\n\t\t}\n\t}\n":
@@ -43,6 +43,12 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+	source: "\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timages {\n\t\t\t\tid\n\t\t\t\torder\n\t\t\t\timage {\n\t\t\t\t\turl\n\t\t\t\t\tpath\n\t\t\t\t}\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n",
+): (typeof documents)["\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timages {\n\t\t\t\tid\n\t\t\t\torder\n\t\t\t\timage {\n\t\t\t\t\turl\n\t\t\t\t\tpath\n\t\t\t\t}\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
 	source: "\n\tmutation GiftOrderSubmitOrWithdraw(\n\t\t$giftId: ID!\n\t\t$status: OrderStatus!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_submit_or_withdraw(\n\t\t\tgift_id: $giftId\n\t\t\tstatus: $status\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n",
 ): (typeof documents)["\n\tmutation GiftOrderSubmitOrWithdraw(\n\t\t$giftId: ID!\n\t\t$status: OrderStatus!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_submit_or_withdraw(\n\t\t\tgift_id: $giftId\n\t\t\tstatus: $status\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n"];
 /**
@@ -51,12 +57,6 @@ export function gql(
 export function gql(
 	source: "\n\tmutation GiftOrderUpdateAmount(\n\t\t$orderId: ID!\n\t\t$amount: Int!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_update_amount(\n\t\t\torder_id: $orderId\n\t\t\tamount: $amount\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n",
 ): (typeof documents)["\n\tmutation GiftOrderUpdateAmount(\n\t\t$orderId: ID!\n\t\t$amount: Int!\n\t\t$isIgnorePointsBalance: Boolean = false\n\t) {\n\t\tgift_order_update_amount(\n\t\t\torder_id: $orderId\n\t\t\tamount: $amount\n\t\t\tis_ignore_points_balance: $isIgnorePointsBalance\n\t\t) {\n\t\t\tid\n\t\t}\n\t}\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-	source: "\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timage_card {\n\t\t\t\tpath\n\t\t\t\turl\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n",
-): (typeof documents)["\n\tquery Gifts {\n\t\tgifts {\n\t\t\tid\n\t\t\tname\n\t\t\timage_card {\n\t\t\t\tpath\n\t\t\t\turl\n\t\t\t}\n\t\t\tdescription_short\n\t\t\tpoints\n\t\t\tfit_confidence\n\t\t\torder {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t\tamount\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

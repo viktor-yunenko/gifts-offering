@@ -35,6 +35,7 @@ type GiftImageType {
   gift: GiftType!
   id: ID!
   image: DjangoImageType!
+  order: Int!
   updated_at: DateTime!
 }
 
@@ -71,7 +72,7 @@ type GiftType {
   description_short: String!
   fit_confidence: Decimal!
   id: ID!
-  image_card: DjangoImageType!
+  images: [GiftImageType!]!
   is_published: Boolean!
   name: String!
   order: GiftOrderType

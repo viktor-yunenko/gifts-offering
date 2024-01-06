@@ -28,7 +28,6 @@ class Gift(MonitoredModel):
     name = models.CharField(max_length=1024)
     description_short = models.TextField()
     description_full = models.TextField(blank=True)
-    image_card = models.ImageField(upload_to="gifts/cards")
     fit_confidence = models.DecimalField(
         max_digits=10, decimal_places=1, help_text="Is this gift a good fit"
     )
@@ -42,9 +41,18 @@ class Gift(MonitoredModel):
 
 
 class GiftImage(MonitoredModel):
-    gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
+    gift = models.ForeignKey(Gift, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to="gifts/images")
-    caption = models.CharField(max_length=1024)
+    caption = models.CharField(max_length=1024, blank=True)
+
+    order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        ordering = ["order"]
 
     def __str__(self):
         return self.caption
