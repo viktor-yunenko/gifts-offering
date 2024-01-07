@@ -77,7 +77,8 @@ export const GiftCardActions = defineComponent({
 				<CFlex gap="2" align="center">
 					<CTag
 						key={isOrderPending.value.toString()}
-						colorScheme={isOrderPending.value ? "gray" : "fuchsia"}
+						colorScheme={isOrderPending.value ? "gray" : "cyan"}
+						bg={[isOrderPending.value ? "gray.50" : "cyan.50"]}
 					>
 						{props.gift.points}
 					</CTag>

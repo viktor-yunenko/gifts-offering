@@ -54,7 +54,7 @@ export const NavBar = defineComponent({
 			>
 				<CFlex gap="1.5" px="2px">
 					{auth.loading && (
-						<CTag colorScheme="sky">
+						<CTag colorScheme="cyan">
 							<CText
 								key={auth?.user()?.points}
 								animation={

@@ -1,4 +1,4 @@
-import { CFlex, CIcon } from "@chakra-ui/vue-next";
+import { CFlex, CIcon, useTheme } from "@chakra-ui/vue-next";
 import { type PropType, defineComponent } from "vue";
 import type { Gift } from "~/components/index/GiftCard/types";
 
@@ -10,9 +10,13 @@ export const GiftCardFitConfidence = defineComponent({
 		},
 	},
 	setup(props) {
+		const theme = useTheme();
+
 		function getStarProps(starNumber: number) {
 			const score = props.gift.fit_confidence * 5;
-			const starColor = "#22d3ee";
+
+			// @ts-ignore
+			const starColor = theme.colors.cyan["300"];
 
 			if (starNumber <= Math.floor(score)) {
 				return {
@@ -27,7 +31,7 @@ export const GiftCardFitConfidence = defineComponent({
 			} else {
 				return {
 					name: "md-star",
-					color: "gray.300",
+					color: "gray.200",
 				};
 			}
 		}

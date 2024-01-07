@@ -33,7 +33,6 @@ export const GiftCard = defineComponent({
 				p={style.spacing}
 				borderRadius="md"
 				boxShadow="md"
-				overflow="hidden"
 			>
 				<CHeading
 					size="md"

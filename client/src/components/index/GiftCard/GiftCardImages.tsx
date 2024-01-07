@@ -24,19 +24,22 @@ export const GiftCardImages = defineComponent({
 		return () => (
 			<CBox
 				class={css`
-						--swiper-pagination-bottom: -10px;
-						--swiper-pagination-color: var(--chakra-colors-cyan-400);
+						--swiper-pagination-color: var(--chakra-colors-cyan-300);
 						--swiper-pagination-bullet-inactive-color: var(--chakra-colors-gray-200);
 						--swiper-pagination-bullet-inactive-opacity: 1;
 
-						.swiper {
-							overflow-x: hidden;
-							.swiper-pagination {
-								position: static;
-							}
+					.swiper {
+						overflow-x: hidden;
+
+						.swiper-pagination {
+							display: flex;
+							position: static;
+							align-items: center;
+							justify-content: center;
+							margin-top: var(--chakra-space-3);
 						}
-					`}
-				pb="3"
+					}
+				`}
 				overflowX="hidden"
 				zIndex="0"
 			>

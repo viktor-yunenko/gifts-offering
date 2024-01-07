@@ -81,7 +81,7 @@ export const OrderAmountInput = defineComponent({
 					colorScheme="cyan"
 					borderRightRadius="0"
 					ariaLabel="minus"
-					bgColor="cyan.300"
+					bgColor="cyan.200"
 				/>
 				<CFlex
 					w="10"
@@ -103,7 +103,7 @@ export const OrderAmountInput = defineComponent({
 					colorScheme="cyan"
 					borderLeftRadius="0"
 					ariaLabel="plus"
-					bgColor="cyan.300"
+					bgColor="cyan.200"
 				/>
 			</CFlex>
 		);
