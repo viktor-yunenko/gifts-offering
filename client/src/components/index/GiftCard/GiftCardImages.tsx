@@ -24,16 +24,21 @@ export const GiftCardImages = defineComponent({
 		return () => (
 			<CBox
 				class={css`
-						--swiper-pagination-bottom: -1px;
+						--swiper-pagination-bottom: -10px;
 						--swiper-pagination-color: var(--chakra-colors-cyan-400);
 						--swiper-pagination-bullet-inactive-color: var(--chakra-colors-gray-200);
 						--swiper-pagination-bullet-inactive-opacity: 1;
 
 						.swiper {
-							overflow: visible;
+							overflow-x: hidden;
+							.swiper-pagination {
+								position: static;
+							}
 						}
 					`}
 				pb="3"
+				overflowX="hidden"
+				zIndex="0"
 			>
 				<Swiper
 					direction="horizontal"
@@ -45,8 +50,7 @@ export const GiftCardImages = defineComponent({
 							<CCenter>
 								<CImage
 									src={`${config.public.serverUrl}${image.image.url}`}
-									maxH="200px"
-									maxW="fit-content"
+									maxH="350px"
 								/>
 							</CCenter>
 						</SwiperSlide>

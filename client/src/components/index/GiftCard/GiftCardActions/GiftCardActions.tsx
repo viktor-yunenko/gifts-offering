@@ -91,7 +91,7 @@ export const GiftCardActions = defineComponent({
 							loading={loadingIndicator.isLoading}
 							variant="solid"
 						>
-							That's a yes
+							That's a yes!
 						</CButton>
 					)}
 					{isOrderPending.value && (
