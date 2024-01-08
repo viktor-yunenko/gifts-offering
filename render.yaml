@@ -8,6 +8,14 @@ services:
     startCommand: yarn start
     envVars:
       - fromGroup: gifts-envs-prod
+    buildFilter:
+      paths:
+      - client/**
+      ignoredPaths:
+      - scripts/**
+      - README.md
+      - graphql.config.yml
+      - .gitignore
   - type: web
     name: gifts-web-server-prod
     rootDir: server
@@ -27,6 +35,14 @@ services:
       name: media
       mountPath: ./media
       sizeGB: 1
+    buildFilter:
+      paths:
+      - server/**
+      ignoredPaths:
+      - scripts/**
+      - README.md
+      - graphql.config.yml
+      - .gitignore
 
 databases:
   - name: gifts-db-prod

@@ -69,10 +69,9 @@ INSTALLED_APPS = [
     "gifts.apps.gifts",
 ]
 
-static_service_middleware = "whitenoise.middleware.WhiteNoiseMiddleware"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    static_service_middleware,
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
