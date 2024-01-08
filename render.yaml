@@ -2,10 +2,9 @@ services:
   - type: web
     name: gifts-web-client-prod
     rootDir: client
-    plan: free
-    env: node
-    buildCommand: yarn; yarn build
-    startCommand: yarn start
+    runtime: static
+    staticPublishPath: .output/public
+    buildCommand: yarn; yarn generate
     envVars:
       - fromGroup: gifts-envs-prod
     buildFilter:
