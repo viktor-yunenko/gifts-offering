@@ -186,7 +186,14 @@ export type GiftsQuery = {
 			__typename?: "GiftImageType";
 			id: string;
 			order: number;
-			image: { __typename?: "DjangoImageType"; url: string; path: string };
+			caption: string;
+			image: {
+				__typename?: "DjangoImageType";
+				url: string;
+				path: string;
+				height: number;
+				width: number;
+			};
 		}>;
 		order?: {
 			__typename?: "GiftOrderType";
@@ -278,8 +285,20 @@ export const GiftsDocument = {
 															kind: "Field",
 															name: { kind: "Name", value: "path" },
 														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "height" },
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "width" },
+														},
 													],
 												},
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "caption" },
 											},
 										],
 									},

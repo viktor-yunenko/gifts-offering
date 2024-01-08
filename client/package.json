@@ -25,6 +25,7 @@
     "feather-icons-paths": "^1.1.1",
     "marked": "^11.1.0",
     "nuxt": "^3.9.0",
+    "photoswipe": "^5.4.3",
     "sass": "^1.69.6",
     "swiper": "latest",
     "vue": "^3.4.0",
