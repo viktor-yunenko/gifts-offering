@@ -3,6 +3,7 @@ services:
     name: gifts-web-client-prod
     rootDir: client
     runtime: static
+    branch: master
     staticPublishPath: .output/public
     buildCommand: yarn; yarn generate
     envVars:
@@ -22,6 +23,7 @@ services:
     rootDir: server
     plan: starter
     env: python
+    branch: master
     buildCommand: poetry install --only main && ./manage.py collectstatic --no-input
     preDeployCommand: ./manage.py migrate --no-input
     startCommand: python -m daphne gifts.asgi:application --bind=0.0.0.0
