@@ -199,7 +199,7 @@ STATIC_URL = "/static/"
 # noinspection PyUnresolvedReferences
 STATIC_ROOT = os.path.join(BASE_DIR, "static_collected")
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = env.str("MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",

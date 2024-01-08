@@ -32,7 +32,7 @@ services:
           property: connectionString
     disk:
       name: media
-      mountPath: ./media
+      mountPath: /var/lib/media
       sizeGB: 1
     buildFilter:
       paths:
@@ -57,8 +57,14 @@ envVarGroups:
         generateValue: true
       - key: DJANGO_ENV
         value: prod
+      - key: MEDIA_ROOT
+        value: /var/lib/media
       - key: PYTHON_VERSION
         value: 3.12.1
+      - key: POSTMARK_SERVER_TOKEN
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
       - key: SERVER_URL
         sync: false
       - key: CLIENT_URL
