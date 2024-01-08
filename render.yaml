@@ -7,6 +7,8 @@ services:
     buildCommand: yarn; yarn generate
     envVars:
       - fromGroup: gifts-envs-prod
+      - key: NODE_VERSION
+        value: 20.10.0
     buildFilter:
       paths:
       - client/**
@@ -30,6 +32,8 @@ services:
         fromDatabase:
           name: gifts-db-prod
           property: connectionString
+      - key: PYTHON_VERSION
+        value: 3.12.1
     disk:
       name: media
       mountPath: /var/lib/media
@@ -59,8 +63,6 @@ envVarGroups:
         value: prod
       - key: MEDIA_ROOT
         value: /var/lib/media
-      - key: PYTHON_VERSION
-        value: 3.12.1
       - key: POSTMARK_SERVER_TOKEN
         sync: false
       - key: ALLOWED_HOSTS
