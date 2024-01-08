@@ -4,14 +4,9 @@ from pathlib import Path
 
 import dj_database_url
 import environ
-import sentry_sdk
 from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.strawberry import StrawberryIntegration
 from strawberry_django.settings import StrawberryDjangoSettings
-
-from gifts.utils import sentry
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +22,8 @@ class DjangoEnv(Enum):
     BUILD = "build"
 
 
+load_dotenv(os.path.join(BASE_DIR, ".env"), override=False)
+
 DJANGO_ENV = DjangoEnv(env.str("DJANGO_ENV", DjangoEnv.LOCAL.value))
 
 if DJANGO_ENV is DjangoEnv.LOCAL:
@@ -37,29 +34,6 @@ DJANGO_ENV_ENUM = DjangoEnv
 SENTRY_TRACES_SAMPLE_RATE = env.float("SENTRY_TRACE_SAMPLE_RATE", 1.0)
 
 project_name = "gifts"
-
-if DJANGO_ENV in (DjangoEnv.STAGE, DjangoEnv.PROD) or env.bool("IS_ENABLE_SENTRY", False):
-    sentry_release = env.str("SENTRY_RELEASE", None)
-    sentry_sdk.init(
-        dsn=env.str(
-            "SENTRY_DSN",
-            "https://482eb6c9cff14d8f94e53cd82060b559@o359384.ingest.sentry.io/4503921800970240",
-        ),
-        server_name=env.str("RENDER_SERVICE_NAME", None),
-        integrations=[
-            DjangoIntegration(),
-            StrawberryIntegration(),
-        ],
-        traces_sampler=sentry.traces_sampler,
-        traces_sample_rate=SENTRY_TRACES_SAMPLE_RATE,
-        profiles_sample_rate=SENTRY_TRACES_SAMPLE_RATE,
-        send_default_pii=True,
-        environment=DJANGO_ENV.value,
-        release=f"{project_name}@{sentry_release}" if sentry_release else None,
-        # strawberry integration only shows HTTP body, that's confusing
-        attach_stacktrace=True,
-        enable_tracing=True,
-    )
 
 SECRET_KEY = env.str(
     "SECRET_KEY", "9!v>Cz:i?2>):76Sta}@2/z94(.JH/p),M%iTP't&93r6SJ9}_Vq&.9e[]~y)a1?"
@@ -109,11 +83,6 @@ MIDDLEWARE = [
     "simple_history.middleware.HistoryRequestMiddleware",  # noqa
     "hijack.middleware.HijackUserMiddleware",
 ]
-
-if DJANGO_ENV == DjangoEnv.LOCAL:
-    # daphne hangs on infinite load if you add it
-    # in prod should be ok since we have no static anyway except admin
-    MIDDLEWARE.remove(static_service_middleware)
 
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")

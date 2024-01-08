@@ -40,8 +40,8 @@
     python-dotenv = "^1.0.0"
     python-dateutil = "^2.8.2"
     requests = "^2.31.0"
-    sentry-sdk = "^1.39.1"
-    whitenoise = "^6.5.0"
+    sentry-sdk = {extras = ["django"], version = "^1.39.1"}
+    whitenoise = { git = "https://github.com/Archmonger/whitenoise.git", rev = "503e9579bba9fe8e92aad1e646039b7382cdc627" }
     humanize = "^4.4.0"
     faker = "^19.3.0"
     psycopg = "^3.1.16"
