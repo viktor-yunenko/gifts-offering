@@ -27,7 +27,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"), override=False)
 DJANGO_ENV = DjangoEnv(env.str("DJANGO_ENV", DjangoEnv.LOCAL.value))
 
 if DJANGO_ENV is DjangoEnv.LOCAL:
-    load_dotenv(os.path.join(BASE_DIR, ".env.local"), override=False)
+    load_dotenv(os.path.join(BASE_DIR, ".env.local"), override=True)
 
 DJANGO_ENV_ENUM = DjangoEnv
 
