@@ -31,7 +31,7 @@ export const OrderAmountInput = defineComponent({
 
 		const { mutate: orderUpdateAmount } = useMutation(
 			GIFT_ORDER_UPDATE_AMOUNT,
-			{ refetchQueries: appQueries },
+			{ refetchQueries: appQueries, awaitRefetchQueries: true },
 		);
 
 		async function onOrderUpdateAmount(options?: {
@@ -70,6 +70,8 @@ export const OrderAmountInput = defineComponent({
 
 				<CIconButton
 					disabled={props.order.amount === 1}
+					// @ts-ignore
+					isLoading={loadingIndicator.isLoading.value}
 					onClick={async () => {
 						amountChangePending.value = "minus";
 						await onOrderUpdateAmount({
@@ -101,6 +103,8 @@ export const OrderAmountInput = defineComponent({
 					icon="plus"
 					// @ts-ignore
 					colorScheme="cyan"
+					// @ts-ignore
+					isLoading={loadingIndicator.isLoading.value}
 					borderLeftRadius="0"
 					ariaLabel="plus"
 					bgColor="cyan.200"

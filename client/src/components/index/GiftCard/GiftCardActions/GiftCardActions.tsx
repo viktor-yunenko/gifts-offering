@@ -33,7 +33,7 @@ export const GiftCardActions = defineComponent({
 
 		const { mutate: orderSubmitOrWithdraw } = useMutation(
 			GIFT_ORDER_SUBMIT_OR_WITHDRAW,
-			{ refetchQueries: appQueries },
+			{ refetchQueries: appQueries, awaitRefetchQueries: true },
 		);
 
 		async function onOrderSubmitOrWithdraw(
@@ -89,7 +89,7 @@ export const GiftCardActions = defineComponent({
 					{!isOrderPending.value && (
 						<CButton
 							onClick={() => onOrderSubmitOrWithdraw(OrderStatus.Submitted)}
-							loading={loadingIndicator.isLoading}
+							isLoading={loadingIndicator.isLoading.value}
 							variant="solid"
 						>
 							That's a yes!
@@ -99,7 +99,7 @@ export const GiftCardActions = defineComponent({
 						<CFlex gap="4">
 							<CButton
 								onClick={() => onOrderSubmitOrWithdraw(OrderStatus.Withdrawn)}
-								loading={loadingIndicator.isLoading}
+								isLoading={loadingIndicator.isLoading.value}
 								variant="outline"
 								colorScheme="gray"
 								fontWeight="normal"
